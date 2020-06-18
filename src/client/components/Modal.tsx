@@ -7,6 +7,7 @@ import { textColorForBackground } from "../utils/color";
 const customStyles = {
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.2)",
+    zIndex: 2,
   },
   content: {
     top: "50%",
