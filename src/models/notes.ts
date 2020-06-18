@@ -11,6 +11,8 @@ interface IndexNote {
   id: string;
 }
 
+elasticlunr.tokenizer.setSeperator(/[\s\-\]/[\.]+/);
+
 const idx = elasticlunr<IndexNote>(function () {
   this.addField("createdAt");
   this.addField("content");
