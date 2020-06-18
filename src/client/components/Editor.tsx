@@ -25,21 +25,6 @@ const Input = styled.textarea`
   background: transparent;
 `;
 
-const Placeholder = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  max-width: 100%;
-  padding-left: 3rem;
-  padding-right: 1rem;
-  text-align: center;
-  transform: translateY(-50%);
-  font-size: 1.5rem;
-  color: ${({ theme }) =>
-    shadeColor(textColorForBackground(theme.background1), 30)};
-`;
-
 export function Editor() {
   const ref = React.useRef<HTMLTextAreaElement>(null);
   const rootRef = React.useRef<HTMLDivElement>(null);
@@ -47,7 +32,6 @@ export function Editor() {
   const noteEdit = useSelector(getEdit);
   const [editor, setEditor] = React.useState<CodeMirror.Editor>(null);
   const [focus, setFocus] = React.useState<boolean>(false);
-  const [value, setValue] = React.useState<string>("");
 
   useEditorNoteEdit(editor, noteEdit);
   useEditorKeydown(rootRef, editor, focus);
@@ -55,6 +39,7 @@ export function Editor() {
 
   React.useLayoutEffect(() => {
     const codeMirror = CodeMirror.fromTextArea(ref.current, {
+      placeholder: "Write your thoughts or drag any files here",
       lineWrapping: true,
       mode: {
         name: "gfm",
@@ -93,7 +78,6 @@ export function Editor() {
       _editor: any,
       change: CodeMirror.EditorChangeLinkedList
     ) => {
-      setValue(codeMirror.getValue());
       const { from, to, text, removed } = change;
 
       // auto insert list characters
@@ -234,14 +218,11 @@ export function Editor() {
       codeMirror.off("change", onUpdate);
       setEditor(null);
     };
-  }, [ref, setValue]);
+  }, [ref]);
 
   return (
     <EditorRoot ref={rootRef}>
       <Input ref={ref} />
-      {!value && (
-        <Placeholder>Write your thoughts or drag any files here</Placeholder>
-      )}
     </EditorRoot>
   );
 }

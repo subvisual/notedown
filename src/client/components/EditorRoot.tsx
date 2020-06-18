@@ -31,6 +31,7 @@ export default styled.div`
   }
 
   .cm-s-notes .CodeMirror-placeholder {
+    margin-left: 0.5rem;
     color: ${({ theme }) =>
       shadeColor(textColorForBackground(theme.background1), 30)};
   }
