@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "lib": ["dom", "es2015"],
+    "types": [],
+    "module": "commonjs",
+    "sourceMap": true,
+    "outDir": "build",
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*", "src/client/*"]
+    },
+    "strict": true,
+    "strictNullChecks": false,
+    "noImplicitAny": true
+  },
+  "include": ["src/**/*"]
+}
