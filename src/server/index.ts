@@ -62,7 +62,6 @@ async function createWindow() {
   mainWindow = new BrowserWindow({
     backgroundColor: colors.background1,
     height: 900,
-    show: false,
     titleBarStyle: "hiddenInset",
     width: 1500,
     autoHideMenuBar: true,
@@ -72,11 +71,6 @@ async function createWindow() {
   });
 
   mainWindow.menuBarVisible = false;
-
-  mainWindow.once("ready-to-show", () => {
-    mainWindow.show();
-    mainWindow.focus();
-  });
 
   mainWindow.loadURL(
     isDev
