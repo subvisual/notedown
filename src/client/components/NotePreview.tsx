@@ -212,23 +212,13 @@ export const NotePreview = ({ selected, note, focus }: Props) => {
           {selected && (
             <>
               <button onClick={() => dispatch(notesEdit(note))}>edit</button>
-              {note.archived ? (
-                <button
-                  onClick={() =>
-                    dispatch(notesUpdate({ ...note, archived: false }))
-                  }
-                >
-                  unarchive
-                </button>
-              ):(
-                <button
-                  onClick={() =>
-                    dispatch(notesUpdate({ ...note, archived: true }))
-                  }
-                >
-                  archive
-                </button>
-              )}
+              <button
+                onClick={() =>
+                  dispatch(notesUpdate({ ...note, archived: !note.archived }))
+                }
+              >
+                {note.archived ? `un` : null}archive
+              </button>
               <button onClick={() => dispatch(notesDelete(note.id))}>
                 remove
               </button>
