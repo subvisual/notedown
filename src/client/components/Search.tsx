@@ -15,6 +15,8 @@ const Root = styled.div<{ active: boolean }>`
   width: 100%;
 
   svg {
+    pointer-events: none;
+
     path {
       fill: ${({ theme, active }) =>
         active
@@ -57,35 +59,21 @@ const Icon = () => {
 };
 
 const Input = styled.input`
-  width: 100%;
-  max-width: calc(1200px - 2rem);
-
-  align-items: center;
   background: transparent;
-  //background: ${({ theme }) => theme.background2};
-  //border-radius: 0.8rem;
   border: none;
   color: ${({ theme }) =>
     shadeColor(textColorForBackground(theme.background1), 30)};
-  display: flex;
   font-size: 1rem;
-  //height: 26px;
-  height: 100%;
-  justify-content: flex-start;
-  line-height: 1;
+  max-width: calc(1200px - 2rem);
+  height: 2rem;
   outline: none;
   padding: 0 1rem;
-  text-align: left;
   transition: all 0.2s linear;
+  width: 100%;
 
   &::placeholder {
     color: currentColor;
   }
-
-  //&:focus {
-    //background: ${({ theme }) => theme.accent1};
-    //color: ${({ theme }) => textColorForBackground(theme.accent1)};
-  //}
 `;
 
 export const Search = (props: React.InputHTMLAttributes<HTMLInputElement>) => {
