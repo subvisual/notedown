@@ -36,7 +36,7 @@ export const addRemoteFile = async (url: string) => {
   const filePath = path.join(folder, fileName);
   await fsPromises.writeFile(filePath, response.data);
 
-  return { id, filePath, fileName };
+  return { id, name: fileName, filePath, fileName };
 };
 
 export const addLocalFile = async (file: File) => {
@@ -44,13 +44,14 @@ export const addLocalFile = async (file: File) => {
 
   const data = await fsPromises.readFile(file.path);
 
-  const fileName = (
-    id + file.name.replace("(", "-").replace(")", "-")
-  ).toLowerCase();
+  const fileName = `${id}-${file.name}`
+    .match(/[a-zA-Z0-9]+/g)
+    .join("-")
+    .toLowerCase();
   const filePath = path.join(folder, fileName);
   await fsPromises.writeFile(filePath, data);
 
-  return { id, filePath, fileName: fileName };
+  return { id, name: file.name, filePath, fileName: fileName };
 };
 
 export const addBuffer = async (buffer: Buffer) => {
@@ -59,7 +60,7 @@ export const addBuffer = async (buffer: Buffer) => {
   const filePath = path.join(folder, fileName);
   await fsPromises.writeFile(filePath, buffer);
 
-  return { id, filePath, fileName: fileName };
+  return { id, name: fileName, filePath, fileName: fileName };
 };
 
 export const get = async (fileName: string) => {

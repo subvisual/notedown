@@ -192,14 +192,12 @@ export function Editor() {
         savedFile.filePath.endsWith("svg")
       )
         doc.replaceRange(
-          `![${savedFile.fileName}](notesfile://${window.encodeURI(
-            savedFile.fileName
-          )})`,
+          `![${savedFile.name}](notesfile://${savedFile.fileName})`,
           cursor
         );
       else
         doc.replaceRange(
-          `[${savedFile.fileName}](notesfile://${window.encodeURI(
+          `[${savedFile.name}](notesfile://${window.encodeURI(
             savedFile.fileName
           )})`,
           cursor
