@@ -212,7 +212,15 @@ export const NotePreview = ({ selected, note, focus }: Props) => {
           {selected && (
             <>
               <button onClick={() => dispatch(notesEdit(note))}>edit</button>
-              {!note.archived && (
+              {note.archived ? (
+                <button
+                  onClick={() =>
+                    dispatch(notesUpdate({ ...note, archived: false }))
+                  }
+                >
+                  unarchive
+                </button>
+              ):(
                 <button
                   onClick={() =>
                     dispatch(notesUpdate({ ...note, archived: true }))
