@@ -45,7 +45,7 @@ export const addLocalFile = async (file: File) => {
   const data = await fsPromises.readFile(file.path);
 
   const fileName = `${id}-${file.name}`
-    .match(/[a-zA-Z0-9]+/g)
+    .match(/[a-zA-Z0-9\.\-_]+/g)
     .join("-")
     .toLowerCase();
   const filePath = path.join(folder, fileName);
