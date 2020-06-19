@@ -45,7 +45,6 @@ export const notesOnboardingEpic = (
   action$.pipe(
     ofType(notesLoadSuccess.type),
     mergeMap(({ payload }) => of(payload.length)),
-    tap(console.log),
     filter((count) => count === 0),
     mergeMap(() =>
       of(
