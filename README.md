@@ -1,20 +1,22 @@
 # NoteDown
 
-## Principles
+![Screenshot](./assets/demo.png)
 
-- Keyboard-driven. There are shortcuts for almost everything.
-- No server and no accounts. Data is saved to the file system so you don't
-  have to trust someone else with keeping your data safe.
-- Plain simple. Just write things down and search for them when needed.
+- It's keyboard-driven. There are shortcuts for almost everything.
+- There are no severs and accounts. Your data is saved to the file system so
+  you don't have to trust anyone else.
+- It's simple. Just write and drop files into it. Use the search to find what
+  you're looking for.
 
 ## Features
 
 - Markdown editor with image previews.
-- Change colors.
+- Change the theme or pick your colors.
 - Shortcuts for almost everything.
 - Drop files.
 - Paste images.
 - Full-text search.
+- Folder sync to backup and restore.
 - Simplicity.
 
 ## Todo
