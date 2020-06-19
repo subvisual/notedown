@@ -51,7 +51,8 @@ export const Help = () => {
             <li>Files are saved alongside the notes.</li>
             <li>
               Use <em>Sync Folder</em> from the menu to back-up your files to a
-              cloud provider
+              folder. You can use this to setup backups to a cloud provider. Two
+              computers could use this sync data.
             </li>
             <li>
               <button onClick={() => dispatch(modeSet("colorPicker"))}>
