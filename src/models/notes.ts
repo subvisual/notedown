@@ -1,9 +1,15 @@
+import * as PDFJS from "pdfjs-dist";
 import * as shortid from "shortid";
 import * as elasticlunr from "elasticlunr";
+import { range, flatten, compact } from "lodash";
 import { format } from "date-fns";
 
 import { Note } from "./types";
 import { db as DB } from "./database";
+
+//@ts-ignore
+import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
+PDFJS.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 interface IndexNote {
   content: string;
@@ -37,7 +43,7 @@ export const add = async (
   };
 
   db.get("entries").push(note).write();
-  idx.addDoc(formatDocumentForIndex(note));
+  idx.addDoc(await formatDocumentForIndex(note));
 
   return note;
 };
@@ -53,7 +59,7 @@ export const remove = async (
     .assign({ ...note, deleted: true, updatedAt: new Date() })
     .write();
 
-  idx.removeDoc(formatDocumentForIndex(note));
+  idx.removeDoc(await formatDocumentForIndex(note));
 };
 
 export const update = async (
@@ -64,7 +70,7 @@ export const update = async (
     .find({ id: note.id })
     .assign({ ...note, updatedAt: new Date() })
     .write();
-  idx.updateDoc(formatDocumentForIndex(note));
+  idx.updateDoc(await formatDocumentForIndex(note));
   return;
 };
 
@@ -78,7 +84,7 @@ export const updateOrInsert = async (
 
   if (!found) {
     db.get("entries").push(note).write();
-    idx.addDoc(formatDocumentForIndex(note));
+    idx.addDoc(await formatDocumentForIndex(note));
     return;
   }
 
@@ -88,7 +94,7 @@ export const updateOrInsert = async (
       .assign({ ...note })
       .write();
 
-    idx.updateDoc(formatDocumentForIndex(note));
+    idx.updateDoc(await formatDocumentForIndex(note));
   }
 };
 
@@ -100,12 +106,52 @@ export const search = async (query: string) => {
 };
 
 loadAll().then((notes) =>
-  notes.map((note) => idx.addDoc(formatDocumentForIndex(note)))
+  notes.map(async (note) => idx.addDoc(await formatDocumentForIndex(note)))
 );
 
-function formatDocumentForIndex(note: Note) {
+async function formatDocumentForIndex(note: Note) {
+  let content = note.content;
+
+  if (content) {
+    const pdfs = await pdfFromMarkdown(content);
+    const pdfsContent = await Promise.all(pdfs.map(textFromPDF));
+    content += " " + flatten(pdfsContent).join(" ");
+  }
+
   return {
     ...note,
+    content,
     createdAt: format(new Date(note.createdAt), "cccc MMMM"),
   };
+}
+
+async function pdfFromMarkdown(markdown: string) {
+  const markdownPDFs = markdown.match(/\[[^\]]*\]\([^\)]*\.pdf\)/g);
+
+  if (!markdownPDFs) return [];
+
+  return compact(
+    await Promise.all(
+      markdownPDFs.map(async (content) => {
+        const match = content.match(/\[[^\]]*\]\(([^\)]*\.pdf)\)/);
+
+        if (match) return match[1];
+        else return null;
+      })
+    )
+  );
+}
+
+async function textFromPDF(pdfURL: string) {
+  const res = PDFJS.getDocument(pdfURL);
+  const pdf = await res.promise;
+  const maxPages = pdf.numPages;
+
+  return Promise.all(
+    range(1, maxPages + 1).map(async (pageNr) => {
+      const page = await pdf.getPage(pageNr);
+      const pageContent = await page.getTextContent();
+      return pageContent.items.map(({ str }) => str);
+    })
+  );
 }
