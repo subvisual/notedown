@@ -1,4 +1,8 @@
-import { ThemeColors } from "../client/theme";
+export interface ThemeColors {
+  background1: string;
+  background2: string;
+  accent1: string;
+}
 
 export type Note = {
   archived?: boolean;
@@ -49,5 +53,3 @@ export interface Database {
   entries: Note[];
   theme: ThemeColors;
 }
-
-export { ThemeColors } from "../client/theme";

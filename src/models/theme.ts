@@ -1,5 +1,5 @@
 import { db } from "./database";
-import { ThemeColors } from "../models/types";
+import { ThemeColors } from "./types";
 
 export const get = async () => {
   return db.get("theme").value();
