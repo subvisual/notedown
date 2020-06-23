@@ -83,7 +83,7 @@ export const updateOrInsert = async (
   }
 };
 
-if (!Index.hasSavedIndex()) {
+if (Index.hasSavedIndex()) {
   Index.loadIndex();
 } else {
   loadAll().then((notes) =>
