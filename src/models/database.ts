@@ -15,6 +15,7 @@ if (isRenderer) {
 }
 
 export const databaseFile = `${localApp.getPath("userData")}/.timeline.json`;
+export const indexFile = `${localApp.getPath("userData")}/.index.json`;
 
 export const createDatabase = (file: string) => {
   const adapter = new FileSync<Database>(file);

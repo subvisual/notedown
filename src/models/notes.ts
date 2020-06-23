@@ -1,30 +1,15 @@
 import * as PDFJS from "pdfjs-dist";
 import * as shortid from "shortid";
-import * as elasticlunr from "elasticlunr";
 import { range, flatten, compact } from "lodash";
 import { format } from "date-fns";
 
 import { Note } from "./types";
 import { db as DB } from "./database";
+import * as Index from "./index";
 
 //@ts-ignore
 import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
 PDFJS.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-
-interface IndexNote {
-  content: string;
-  createdAt: string;
-  id: string;
-}
-
-elasticlunr.tokenizer.setSeperator(/[\s\-\]/[\.]+/);
-
-const idx = elasticlunr<IndexNote>(function () {
-  this.addField("createdAt");
-  this.addField("content");
-  this.setRef("id");
-  this.saveDocument(false);
-});
 
 export const loadAll = async ({ db }: { db?: typeof DB } = { db: DB }) => {
   return db.get("entries").reject({ deleted: true }).value();
@@ -43,7 +28,7 @@ export const add = async (
   };
 
   db.get("entries").push(note).write();
-  idx.addDoc(await formatDocumentForIndex(note));
+  Index.add(await formatDocumentForIndex(note));
 
   return note;
 };
@@ -59,7 +44,7 @@ export const remove = async (
     .assign({ ...note, deleted: true, updatedAt: new Date() })
     .write();
 
-  idx.removeDoc(await formatDocumentForIndex(note));
+  Index.remove(id);
 };
 
 export const update = async (
@@ -70,7 +55,7 @@ export const update = async (
     .find({ id: note.id })
     .assign({ ...note, updatedAt: new Date() })
     .write();
-  idx.updateDoc(await formatDocumentForIndex(note));
+  Index.update(await formatDocumentForIndex(note));
   return;
 };
 
@@ -84,7 +69,7 @@ export const updateOrInsert = async (
 
   if (!found) {
     db.get("entries").push(note).write();
-    idx.addDoc(await formatDocumentForIndex(note));
+    Index.add(await formatDocumentForIndex(note));
     return;
   }
 
@@ -94,20 +79,17 @@ export const updateOrInsert = async (
       .assign({ ...note })
       .write();
 
-    idx.updateDoc(await formatDocumentForIndex(note));
+    Index.update(await formatDocumentForIndex(note));
   }
 };
 
-export const search = async (query: string) => {
-  return idx.search(query, {
-    // @ts-ignore
-    expand: true,
-  });
-};
-
-loadAll().then((notes) =>
-  notes.map(async (note) => idx.addDoc(await formatDocumentForIndex(note)))
-);
+if (!Index.hasSavedIndex()) {
+  Index.loadIndex();
+} else {
+  loadAll().then((notes) =>
+    notes.map(async (note) => Index.add(await formatDocumentForIndex(note)))
+  );
+}
 
 async function formatDocumentForIndex(note: Note) {
   let content = note.content;

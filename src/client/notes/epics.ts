@@ -31,7 +31,21 @@ import {
 } from "./actions";
 import * as Sync from "../../models/sync";
 import * as Notes from "../../models/notes";
+import * as Index from "../../models/index";
 import { RootState } from "../../models/types";
+
+export const notesSaveIndexEpic = (
+  action$: ActionsObservable<
+    | ReturnType<typeof notesAddSuccess>
+    | ReturnType<typeof notesUpdate>
+    | ReturnType<typeof notesRemove>
+  >
+) =>
+  action$.pipe(
+    ofType(notesAddSuccess.type, notesUpdate.type, notesRemove.type),
+    tap(() => Index.saveIndex()),
+    ignoreElements()
+  );
 
 export const loadNotesEpic = (action$: ActionsObservable<NotesActionTypes>) =>
   action$.pipe(
@@ -125,7 +139,7 @@ export const notesSearchEpic = (
   action$.pipe(
     ofType(notesSearch.type),
     throttle(() => interval(200), { trailing: true }),
-    mergeMap(({ payload }) => Notes.search(payload).then(notesSearchResult))
+    mergeMap(({ payload }) => Index.search(payload).then(notesSearchResult))
   );
 
 export const notesSyncEpic = (
@@ -176,4 +190,5 @@ export const notesEpics = [
   notesSyncEpic,
   notesSyncFolderEpic,
   notesOnboardingEpic,
+  notesSaveIndexEpic,
 ];
