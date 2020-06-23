@@ -115,7 +115,7 @@ async function createWindow() {
 
       fileURL = querystring.unescape(fileURL);
       exec(
-        "open " + path.join(filesFolder, fileURL.replace("notesfile:/", ""))
+        `open '${path.join(filesFolder, fileURL.replace("notesfile://", ""))}'`
       );
       event.preventDefault();
       return;

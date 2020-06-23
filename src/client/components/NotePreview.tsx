@@ -204,6 +204,21 @@ export const NotePreview = ({ selected, note, focus }: Props) => {
     ref.current.scrollIntoViewIfNeeded();
   }, [focus, ref.current]);
 
+  React.useLayoutEffect(() => {
+    if (!ref.current) return;
+
+    const handler = (e: MouseEvent) => {
+      if (e.target instanceof Element && e.target.nodeName === "IMG") {
+        window.open(e.target.getAttribute("src"), "_blank");
+      }
+    };
+
+    ref.current.addEventListener("click", handler, { passive: true });
+
+    return () =>
+      ref.current && ref.current.removeEventListener("click", handler);
+  }, [ref.current]);
+
   return (
     <>
       <NoteHeader>
