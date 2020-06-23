@@ -15,7 +15,7 @@
 - Shortcuts for almost everything.
 - Drop files.
 - Paste images.
-- Full-text search.
+- Full-text search in content and PDFs.
 - Folder sync to backup and restore.
 - Simplicity.
 
