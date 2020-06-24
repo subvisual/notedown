@@ -83,13 +83,15 @@ export const updateOrInsert = async (
   }
 };
 
-if (Index.hasSavedIndex()) {
-  Index.loadIndex();
-} else {
-  loadAll().then((notes) =>
-    notes.map(async (note) => Index.add(await formatDocumentForIndex(note)))
-  );
-}
+(async () => {
+  try {
+    await Index.loadIndex();
+  } catch (e) {
+    loadAll().then((notes) =>
+      notes.map(async (note) => Index.add(await formatDocumentForIndex(note)))
+    );
+  }
+})();
 
 async function formatDocumentForIndex(note: Note) {
   let content = note.content;
