@@ -25,7 +25,7 @@ export const useEditorKeydown = (
   }, [ref.current, editor, focus]);
 
   React.useLayoutEffect(() => {
-    if (currentMode !== "editor") return;
+    if (currentMode !== "editor" && currentMode !== "editorFocus") return;
 
     setImmediate(() => editor.focus());
   }, [editor, currentMode]);

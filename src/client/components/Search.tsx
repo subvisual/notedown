@@ -3,7 +3,7 @@ import * as React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { textColorForBackground, shadeColor } from "../utils/color";
-import { getMode } from "../selectors";
+import { getMode, getWritingFocusMode } from "../selectors";
 import { modeClose } from "../mode";
 
 const Root = styled.div<{ active: boolean }>`
@@ -79,6 +79,7 @@ const Input = styled.input`
 export const Search = (props: React.InputHTMLAttributes<HTMLInputElement>) => {
   const ref = React.useRef(null);
   const inputRef = React.useRef(null);
+  const writingFocusMode = useSelector(getWritingFocusMode);
 
   const [focus, setFocus] = React.useState(false);
 
@@ -100,22 +101,28 @@ export const Search = (props: React.InputHTMLAttributes<HTMLInputElement>) => {
   }, [ref, inputRef, focus]);
 
   React.useLayoutEffect(() => {
+    if (!inputRef.current) return;
+
     if (currentMode !== "search") {
       return inputRef.current.blur();
     }
 
-    setImmediate(() => inputRef.current.focus());
+    setImmediate(() => inputRef.current && inputRef.current.focus());
   }, [inputRef, currentMode]);
 
   return (
     <Root active={focus} ref={ref}>
-      <Icon />
-      <Input
-        {...props}
-        ref={inputRef}
-        onBlur={() => setFocus(false)}
-        onFocus={() => setFocus(true)}
-      />
+      {!writingFocusMode && (
+        <>
+          <Icon />
+          <Input
+            {...props}
+            ref={inputRef}
+            onBlur={() => setFocus(false)}
+            onFocus={() => setFocus(true)}
+          />
+        </>
+      )}
     </Root>
   );
 };

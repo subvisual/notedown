@@ -37,3 +37,6 @@ export const getSearchResultNotes = createSelector(
 export const getTheme = (state: RootState) => state.theme;
 
 export const getMode = (state: RootState) => state.mode.name;
+
+export const getWritingFocusMode = (state: RootState) =>
+  state.mode.name === "editorFocus";

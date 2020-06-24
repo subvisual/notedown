@@ -18,6 +18,7 @@
 - Full-text search in content and PDFs.
 - Folder sync to backup and restore.
 - Simplicity.
+- Focused writing mode.
 
 ## Todo
 

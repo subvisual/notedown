@@ -98,6 +98,9 @@ export const Help = () => {
               <li>
                 <em>c</em> - Change the theme.
               </li>
+              <li>
+                <em>n</em> - Focus mode.
+              </li>
             </ul>
             <p>
               Some shortcuts are only available when your focus is on the notes

@@ -10,12 +10,11 @@ import "codemirror/addon/display/placeholder";
 
 import * as Files from "../../models/files";
 import { notesUpdateOrAdd } from "../notes/actions";
-import { getEdit } from "../selectors";
+import { getEdit, getWritingFocusMode } from "../selectors";
 import { useEditorPaste } from "../utils/useEditorPaste";
 import { useEditorKeydown } from "../utils/useEditorKeydown";
 
 import EditorRoot from "./EditorRoot";
-import { textColorForBackground, shadeColor } from "../utils/color";
 import { useEditorNoteEdit } from "../utils/useEditorNoteEdit";
 
 const Input = styled.textarea`
@@ -32,6 +31,7 @@ export function Editor() {
   const noteEdit = useSelector(getEdit);
   const [editor, setEditor] = React.useState<CodeMirror.Editor>(null);
   const [focus, setFocus] = React.useState<boolean>(false);
+  const writingFocusMode = useSelector(getWritingFocusMode);
 
   useEditorNoteEdit(editor, noteEdit);
   useEditorKeydown(rootRef, editor, focus);
@@ -219,7 +219,7 @@ export function Editor() {
   }, [ref]);
 
   return (
-    <EditorRoot ref={rootRef}>
+    <EditorRoot center={writingFocusMode} ref={rootRef}>
       <Input ref={ref} />
     </EditorRoot>
   );

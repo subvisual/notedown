@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import { textColorForBackground, shadeColor } from "../utils/color";
 
-export default styled.div`
+export default styled.div<{ center: boolean }>`
   position: relative;
   background: ${({ theme }) => theme.background1};
   border-radius: 0.5rem;
@@ -10,7 +10,7 @@ export default styled.div`
   flex-grow: 0;
   flex-shrink: 1;
   overflow: scroll;
-  padding: 1rem 0 0.8rem 3rem;
+  padding: 1rem 0 0.8rem ${({ center }) => (center ? "0" : "3rem")};
   cursor: text;
   color: ${({ theme }) => textColorForBackground(theme.background1)};
 

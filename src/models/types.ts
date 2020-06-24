@@ -33,7 +33,13 @@ export interface ThemeState {
 }
 
 export interface ModeState {
-  name: "tips" | "shortcuts" | "colorPicker" | "search" | "editor";
+  name:
+    | "tips"
+    | "shortcuts"
+    | "colorPicker"
+    | "search"
+    | "editor"
+    | "editorFocus";
 }
 
 export interface MenuBarState {

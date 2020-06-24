@@ -11,9 +11,13 @@ import { Help } from "./Help";
 import { MenuBar } from "./MenuBar";
 import { notesLoad, notesEdit, notesSelect, notesDelete } from "../notes";
 import { modeSet } from "../mode";
-import { getSelected, getSearchResultNotes } from "../selectors";
+import {
+  getSelected,
+  getSearchResultNotes,
+  getWritingFocusMode,
+} from "../selectors";
 
-const Root = styled.div`
+const Root = styled.div<{ hidePanel: boolean }>`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -30,7 +34,8 @@ const Root = styled.div`
     left: 0;
     height: 100%;
     width: 50%;
-    background: ${({ theme }) => theme.background2};
+    background: ${({ theme, hidePanel }) =>
+      hidePanel ? "transparent" : theme.background2};
   }
 `;
 
@@ -49,6 +54,7 @@ export function HomePage() {
 
   const selected = useSelector(getSelected);
   const notes = useSelector(getSearchResultNotes);
+  const writingFocusMode = useSelector(getWritingFocusMode);
 
   const selectedIndex = React.useMemo(
     () => selected && findIndex(notes, { id: selected.id }),
@@ -97,6 +103,10 @@ export function HomePage() {
     dispatch(modeSet("shortcuts"));
   }, [dispatch]);
 
+  const editorFocusHandler = useCallback(() => {
+    dispatch(modeSet("editorFocus"));
+  }, [dispatch]);
+
   useKeyPress("/", undefined, searchHandler);
   useKeyPress("c", undefined, colorPickerHandler);
   useKeyPress("e", undefined, editHandler);
@@ -105,6 +115,7 @@ export function HomePage() {
   useKeyPress("s", undefined, shortcutsHandler);
   useKeyPress("i", undefined, editorHandler);
   useKeyPress("d", undefined, deleteHandler);
+  useKeyPress("n", undefined, editorFocusHandler);
 
   useKeyPress("k", undefined, upHandler);
   useKeyPress("j", undefined, downHandler);
@@ -115,10 +126,12 @@ export function HomePage() {
     <>
       <MenuBar />
       <Help />
-      <Root>
-        <Left>
-          <NotesList notes={notes} selected={selected} />
-        </Left>
+      <Root hidePanel={writingFocusMode}>
+        {!writingFocusMode && (
+          <Left>
+            <NotesList notes={notes} selected={selected} />
+          </Left>
+        )}
         <Editor />
       </Root>
     </>
