@@ -1,54 +1,54 @@
 import * as React from "react";
-import styled from "styled-components";
 import * as ReactModal from "react-modal";
 
 import { textColorForBackground } from "../utils/color";
-
-const customStyles = {
-  overlay: {
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
-    zIndex: 2,
-  },
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    transform: "translate(-50%, -50%)",
-    backgroundColor: "transparent",
-    overflow: "initial",
-    padding: 0,
-    margin: 0,
-    border: 0,
-  },
-};
-
-const Content = styled.div`
-  background: ${({ theme }) => theme.background1};
-  color: ${({ theme }) => textColorForBackground(theme.background1)};
-  min-width: 600px;
-  border-radius: 0.5rem;
-`;
+import { useSelector } from "react-redux";
+import { getTheme } from "../selectors";
 
 export const Modal = ({
   children,
   contentLabel,
   open,
   onClose,
+  style,
 }: {
   children: any;
   contentLabel?: string;
   open: boolean;
   onClose: () => any;
+  style?: React.CSSProperties;
 }) => {
+  const theme = useSelector(getTheme);
+
   return (
     <ReactModal
       isOpen={open}
       onRequestClose={onClose}
-      style={customStyles}
+      style={{
+        overlay: {
+          backgroundColor: "rgba(0, 0, 0, 0.2)",
+          zIndex: 2,
+        },
+        content: {
+          backgroundColor: theme.colors.background1,
+          border: 0,
+          borderRadius: "0.5rem",
+          bottom: "auto",
+          color: textColorForBackground(theme.colors.background1),
+          left: "50%",
+          margin: 0,
+          minWidth: 600,
+          overflow: "initial",
+          padding: 0,
+          right: "auto",
+          top: "50%",
+          transform: "translate(-50%, -50%)",
+          ...style,
+        },
+      }}
       contentLabel={contentLabel}
     >
-      <Content>{children}</Content>
+      {children}
     </ReactModal>
   );
 };
