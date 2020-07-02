@@ -16,12 +16,23 @@
   "build": {
     "productName": "NoteDown",
     "appId": "com.gabrielpoca.notedown",
+    "afterSign": "bin/notarize.js",
     "mac": {
+      "target": [
+        "dmg"
+      ],
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "hardenedRuntime": true,
       "category": "com.gabrielpoca.notedown",
       "icon": "assets/icons/icon.png"
     },
     "linux": {
       "target": "tar.gz"
+    },
+    "dmg": {
+      "sign": false
     },
     "files": [
       "build/**/*"
@@ -39,6 +50,7 @@
     "codemirror": "^5.53.2",
     "date-fns": "^2.13.0",
     "elasticlunr": "^0.9.5",
+    "electron-notarize": "^1.0.0",
     "lowdb": "^1.0.0",
     "pdfjs-dist": "^2.4.456",
     "react": ">= 16.8.0",
@@ -65,7 +77,7 @@
     "concurrently": "^5.2.0",
     "css-loader": "^3.5.3",
     "electron": "^9.0.0",
-    "electron-builder": "^22.6.1",
+    "electron-builder": "^22.7.0",
     "electron-is-dev": "^1.2.0",
     "error-overlay-webpack-plugin": "^0.4.1",
     "file-loader": "^6.0.0",
