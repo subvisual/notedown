@@ -2,31 +2,54 @@
 
 ![Screenshot](./assets/demo.png)
 
-- It's keyboard-driven. There are shortcuts for almost everything.
-- There are no severs and accounts. Your data is saved to the file system so
-  you don't have to trust anyone else.
-- It's simple. Just write and drop files into it. Use the search to find what
-  you're looking for.
+The principles behind the design of NoteDown:
 
-**Get the latest version from [relases page](https://github.com/subvisual/notedown/releases)**
+- Keyboard-driven. Almost everything should be accomplished through a shortcut.
+- Private. There are no severs and accounts. Nothing leaves your computer so
+  you don't have to trust anyone.
+- Simple. You can write markdown and drop/paste media files.
+
+**Get the latest version from [releases page](https://github.com/subvisual/notedown/releases)**
 
 ## Features
 
-- Markdown editor with image previews.
-- Change the theme or pick your colors.
-- Shortcuts for almost everything.
-- Drop files.
-- Paste images.
-- Full-text search in content and PDFs.
-- Folder sync to backup and restore.
-- Simplicity.
-- Focused writing mode.
+### The Editor
+
+NoteDown demands that you write notes in [Markdown](https://daringfireball.net/projects/markdown/syntax). That's the only way to use it to its full potential. Besides writing Markdown:
+
+- You can drop a file from the file system to save it to NoteDown. A Markdown link to
+  that file will be inserted at the cursor's position. For images and audio
+  files, a Markdown embed will be inserted.
+- You can paste images from the browser or the file system. The image will be saved to NoteDown, and a Markdown embed will be placed at the cursor's position.
+- Pasting links (only links) will transform them into Markdown links.
+- Images will have a preview bellow. We'll be adding more widgets for other elements.
+- Writing lists will automatically insert and remove the `*` and `nr.`.
+
+Besides the original syntax, we extended Markdown to allow:
+
+- embedding audio files using the syntax `!audio[file name](file url)`.
+- embedding youtube videos using the syntax `!youtube[file name](link to video)`.
+
+### Searching
+
+NoteDown is like a diary. You write one entry after the other. Notes are not connected. If you need to find something, you can either scroll, or find. You should use the find as it works to search by text, file names, links, it even works for text inside PDFs! Since you cannot use tags or links like other note-taking applications, they way to relate information is using a keyword. For instance, all my notes related to NoteDown start, or end, with the word `@notedown`. This makes is very easy to look for it. When I need to save a link related to Vim, the link doesn't contain the word `vim` I will usually just write after the link, to make sure I can find it later.
+
+### Notes Explorer
+
+### Backup
+
+Because all your notes and files will be saved to your computer, you should take some precautions to backup your data. On the menu, there's an option for "Sync Folder". This is a two-way mechanism to sync notes to and from a folder. You can use it to back-up notes to Google Drive for instance. You can even use it to sync notes between two computers using NoteDown, but I advise caution on this one, as I haven't tested this thoroughly.
+
+- 
+
+### Tips
+
+- NoteDown comes with a few themes for you to choose from, but you can pick your colors and NoteDown will adjust some things, such as the text, to match the necessary contrast for them.
+- Use the "focus" mode to hide everything but the editor.
 
 ## Todo
 
-- Code signing.
 - Allow writing charts and digrams in markdown.
-- Search text inside images and PDFs.
 - Mobile app.
 
 ## Setup
