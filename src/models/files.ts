@@ -1,14 +1,24 @@
 import * as path from "path";
 import * as fs from "fs";
 import * as shortid from "shortid";
-const { remote } = window.require("electron");
+import * as querystring from "querystring";
+import { app } from "electron";
+import * as axios from "axios";
 
-const app = remote.app;
-const axios = remote.getGlobal("axios");
+let localApp = app;
+let localAxios = axios as any;
+
+const isRenderer = process && process.type === "renderer";
+
+if (isRenderer) {
+  const { remote } = window.require("electron");
+  localApp = remote.app;
+  localAxios = remote.getGlobal("axios");
+}
 
 const fsPromises = fs.promises;
 
-export const folder = path.join(app.getPath("userData"), "files");
+export const folder = path.join(localApp.getPath("userData"), "files");
 
 if (!fs.existsSync(folder)) {
   fs.mkdirSync(folder);
@@ -25,10 +35,22 @@ function getExtension(contentType: string) {
   }
 }
 
+export const notesFileToFullPath = (uri: string) => {
+  let url = uri.substr(12);
+
+  if (url[url.length - 1] === "/") {
+    url = url.substr(0, url.length - 1);
+  }
+
+  url = querystring.unescape(url);
+
+  return path.join(folder, url);
+};
+
 export const addRemoteFile = async (url: string) => {
   const id = shortid();
 
-  const response = await axios.get(url, { responseType: "arraybuffer" });
+  const response = await localAxios.get(url, { responseType: "arraybuffer" });
 
   const ext = getExtension(response.headers["content-type"]);
   const fileName = `${id}.${ext}`.toLowerCase();

@@ -7,6 +7,7 @@ import { exec } from "child_process";
 import * as os from "os";
 
 import * as Theme from "../models/theme";
+import { notesFileToFullPath } from "../models/files";
 
 const filesFolder = path.join(app.getPath("userData"), "files");
 
@@ -37,15 +38,9 @@ protocol.registerSchemesAsPrivileged([
 
 async function createWindow() {
   protocol.registerFileProtocol("notesfile", (request, cb) => {
-    let url = request.url.substr(12);
+    const fileURI = notesFileToFullPath(request.url);
 
-    if (url[url.length - 1] === "/") {
-      url = url.substr(0, url.length - 1);
-    }
-
-    url = querystring.unescape(url);
-
-    cb({ path: path.join(filesFolder, url) });
+    cb({ path: fileURI });
   });
 
   if (isDev) {
@@ -86,15 +81,8 @@ async function createWindow() {
 
   mainWindow.webContents.on("will-navigate", (event, url) => {
     if (url.startsWith("notesfile")) {
-      let fileURL = url;
-
-      if (fileURL[fileURL.length - 1] === "/") {
-        fileURL = fileURL.substr(0, fileURL.length - 1);
-      }
-
-      fileURL = querystring.unescape(fileURL).replace("notesfile:/", "");
-
-      exec(`open \"${path.join(filesFolder, fileURL)}\"`);
+      const fileURI = notesFileToFullPath(url);
+      exec(`open \"${fileURI}\"`);
       event.preventDefault();
       return;
     }

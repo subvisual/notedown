@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 
 import createStore from "./store";
 import "./fonts.css";
+import "./utils/contextMenu";
 
 import App from "./App";
 import { themeLoad } from "./theme";
