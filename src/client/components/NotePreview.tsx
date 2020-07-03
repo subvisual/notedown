@@ -42,11 +42,13 @@ const Root = styled.div<{ selected: boolean }>`
 
   audio {
     width: 100%;
+    margin-bottom: 1rem;
   }
 
   .youtube {
     position: relative;
     padding-bottom: 56.25%;
+    margin-bottom: 1rem;
 
     iframe {
       position: absolute;
