@@ -195,6 +195,14 @@ export function Editor() {
           `![${savedFile.name}](notesfile://${savedFile.fileName})`,
           cursor
         );
+      else if (
+        savedFile.filePath.endsWith("mp3") ||
+        savedFile.filePath.endsWith("wav")
+      )
+        doc.replaceRange(
+          `!audio[${savedFile.name}](notesfile://${savedFile.fileName})`,
+          cursor
+        );
       else
         doc.replaceRange(
           `[${savedFile.name}](notesfile://${window.encodeURI(
