@@ -1,3 +1,4 @@
+const fs = require("fs");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ErrorOverlayPlugin = require("error-overlay-webpack-plugin");
@@ -13,6 +14,19 @@ const clientPlugins = [
 ];
 
 if (isDev) clientPlugins.push(new ErrorOverlayPlugin());
+
+function createAliasesToFolder(originPath) {
+  return fs
+    .readdirSync(originPath, { withFileTypes: true })
+    .filter((found) => found.isDirectory())
+    .reduce(
+      (memo, folder) => ({
+        ...memo,
+        [folder.name]: path.join(originPath, folder.name),
+      }),
+      {}
+    );
+}
 
 module.exports = [
   {
@@ -88,6 +102,10 @@ module.exports = [
     },
     resolve: {
       extensions: [".tsx", ".ts", ".js"],
+      alias: {
+        models: path.resolve(__dirname, "src/models"),
+        ...createAliasesToFolder(path.resolve(__dirname, "src/client")),
+      },
     },
     output: {
       filename: "index.js",

@@ -8,7 +8,7 @@
     "outDir": "build",
     "baseUrl": ".",
     "paths": {
-      "*": ["node_modules/*", "src/client/*"]
+      "*": ["node_modules/*", "src/client/*", "src/*"]
     },
     "strict": true,
     "strictNullChecks": false,
