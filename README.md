@@ -1,8 +1,10 @@
-# NoteDown
+# ![NoteDown](./assets/github_logo.png)
+
+NoteDown is a note-taking app.
 
 ![Screenshot](./assets/demo.png)
 
-The principles behind the design of NoteDown:
+But it's not like every other app. The principles behind the design of NoteDown are:
 
 - Keyboard-driven. Almost everything should be accomplished through a shortcut.
 - Private. There are no severs and accounts. Nothing leaves your computer so
@@ -28,11 +30,13 @@ NoteDown demands that you write notes in [Markdown](https://daringfireball.net/p
 Besides the original syntax, we extended Markdown to allow:
 
 - embedding audio files using the syntax `!audio[file name](file url)`.
-- embedding youtube videos using the syntax `!youtube[file name](link to video)`.
+- embedding Youtube videos using the syntax `!youtube[file name](link to video)`.
 
 ### Searching
 
-NoteDown is like a diary. You write one entry after the other. Notes are not connected. If you need to find something, you can either scroll, or find. You should use the find as it works to search by text, file names, links, it even works for text inside PDFs! Since you cannot use tags or links like other note-taking applications, they way to relate information is using a keyword. For instance, all my notes related to NoteDown start, or end, with the word `@notedown`. This makes is very easy to look for it. When I need to save a link related to Vim, the link doesn't contain the word `vim` I will usually just write after the link, to make sure I can find it later.
+NoteDown is like a diary. You write one note after the other. Time is the only thing connecting notes. To find something, you can either scroll all the way down, or use search input. You should use the search as it works in text, file names, links, it even works for text inside PDFs!
+
+Since you cannot use tags or links like in other note-taking applications, they way to relate information is with keywords. For instance, all my notes related to NoteDown start, or end, with the word `@notedown`. This makes it very easy for me to look it up. When I need to save a link to a page talking about Vim, I paste the link and then write a couple of related words such as `vim` , `editor` or `workflow`.
 
 ### Notes Explorer
 
@@ -40,14 +44,14 @@ NoteDown is like a diary. You write one entry after the other. Notes are not con
 
 Because all your notes and files will be saved to your computer, you should take some precautions to backup your data. On the menu, there's an option for "Sync Folder". This is a two-way mechanism to sync notes to and from a folder. You can use it to back-up notes to Google Drive for instance. You can even use it to sync notes between two computers using NoteDown, but I advise caution on this one, as I haven't tested this thoroughly.
 
-- 
-
 ### Tips
 
 - NoteDown comes with a few themes for you to choose from, but you can pick your colors and NoteDown will adjust some things, such as the text, to match the necessary contrast for them.
 - Use the "focus" mode to hide everything but the editor.
 
-## Todo
+### Todo
+
+These are other things that we may do. We are also open to contributions, so feel free to make them and I'll help getting them merged.
 
 - Allow writing charts and digrams in markdown.
 - Mobile app.
