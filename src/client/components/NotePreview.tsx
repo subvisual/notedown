@@ -1,15 +1,12 @@
 import * as React from "react";
 import { format } from "date-fns";
 import styled, { keyframes, css } from "styled-components";
-import * as showdown from "showdown";
 import { useDispatch } from "react-redux";
 
-import { Note } from "../../models/types";
-import { notesEdit, notesSelect, notesUpdate, notesDelete } from "../notes";
-import { textColorForBackground } from "../utils/color";
-
-const converter = new showdown.Converter();
-converter.setOption("tasklists", true);
+import { Note } from "models/types";
+import { notesEdit, notesSelect, notesUpdate, notesDelete } from "notes";
+import { textColorForBackground } from "utils/color";
+import { convertMdToHTML } from "utils/markdownConverter";
 
 const NoteDate = styled.div`
   color: currentColor;
@@ -42,6 +39,23 @@ const Root = styled.div<{ selected: boolean }>`
   width: 100%;
   margin-bottom: 2rem;
   border-radius: 4px;
+
+  audio {
+    width: 100%;
+  }
+
+  .youtube {
+    position: relative;
+    padding-bottom: 56.25%;
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
 
   img {
     max-width: 100%;
@@ -180,7 +194,7 @@ function NoteContent({
   const [html, setHtml] = React.useState("");
 
   React.useEffect(() => {
-    setHtml(converter.makeHtml(children));
+    setHtml(convertMdToHTML(children));
   }, [children]);
 
   return (
