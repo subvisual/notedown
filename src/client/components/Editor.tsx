@@ -8,14 +8,22 @@ import "codemirror/mode/gfm/gfm";
 import "codemirror/lib/codemirror.css";
 import "codemirror/addon/display/placeholder";
 
-import * as Files from "../../models/files";
-import { notesUpdateOrAdd } from "../notes/actions";
-import { getEdit, getWritingFocusMode } from "../selectors";
-import { useEditorPaste } from "../utils/useEditorPaste";
-import { useEditorKeydown } from "../utils/useEditorKeydown";
+import * as Files from "models/files";
+import { notesUpdateOrAdd } from "notes/actions";
+
+import { getEdit, getWritingFocusMode } from "selectors";
+import { useEditorPaste } from "utils/useEditorPaste";
+import { useEditorKeydown } from "utils/useEditorKeydown";
+import { useEditorNoteEdit } from "utils/useEditorNoteEdit";
+import {
+  isHref,
+  isImageSrc,
+  isAudioSrc,
+  matchMdImage,
+  matchMdListItem,
+} from "utils/regex";
 
 import EditorRoot from "./EditorRoot";
-import { useEditorNoteEdit } from "../utils/useEditorNoteEdit";
 
 const Input = styled.textarea`
   width: 100%;
@@ -78,7 +86,16 @@ export function Editor() {
       _editor: any,
       change: CodeMirror.EditorChangeLinkedList
     ) => {
-      const { from, to, text, removed } = change;
+      const { from, to, text, removed, origin } = change;
+
+      if (origin === "paste") {
+        if (isHref(text[0])) {
+          codeMirror.replaceRange(`[${text[0]}](${text[0]})`, from, {
+            line: to.line,
+            ch: from.ch + text[0].length,
+          });
+        }
+      }
 
       // auto insert list characters
       if (text.length > 1 && text[0] === "" && text[1] === "") {
@@ -86,19 +103,16 @@ export function Editor() {
         const doc = codeMirror.getDoc();
         const cursor = doc.getCursor();
 
-        const match = line.match(/^([\d\*\-])(\.?) (.*)/);
+        const match = matchMdListItem(line);
 
         if (match) {
           // previous line is empty
-          if (match[3] === "" && codeMirror.getLine(from.line + 1) === "") {
+          if (match.empty && codeMirror.getLine(from.line + 1) === "") {
             codeMirror.replaceRange("", { line: from.line, ch: 0 }, to);
-          } else if (match[1] === "*" || match[1] === "-") {
-            codeMirror.replaceRange(`${match[1]}${match[2]} `, cursor);
+          } else if (match.type === "unordered") {
+            codeMirror.replaceRange(match.nextElement, cursor);
           } else {
-            codeMirror.replaceRange(
-              `${parseInt(match[1]) + 1}${match[2]} `,
-              cursor
-            );
+            codeMirror.replaceRange(match.nextElement, cursor);
           }
         }
       }
@@ -131,19 +145,18 @@ export function Editor() {
             return;
           }
 
-          const match = lineValue.match(
-            /!\[[^\]]*\]\((?<filename>.*?)(?=\"|\))(?<optionalpart>\".*\")?\)/
-          );
+          const match = matchMdImage(lineValue);
 
           if (!match) {
             if (lineWidget) {
               lineWidget.widget.clear();
               widgets = _.reject(widgets, { line });
             }
+
             return;
           }
 
-          let url = match[1];
+          let url = match.src;
 
           if (lineWidget && lineWidget.url === url) {
             return;
@@ -185,20 +198,12 @@ export function Editor() {
         }
       }
 
-      if (
-        savedFile.filePath.endsWith("png") ||
-        savedFile.filePath.endsWith("jpg") ||
-        savedFile.filePath.endsWith("jpeg") ||
-        savedFile.filePath.endsWith("svg")
-      )
+      if (isImageSrc(savedFile.filePath))
         doc.replaceRange(
           `![${savedFile.name}](notesfile://${savedFile.fileName})`,
           cursor
         );
-      else if (
-        savedFile.filePath.endsWith("mp3") ||
-        savedFile.filePath.endsWith("wav")
-      )
+      else if (isAudioSrc(savedFile.filePath))
         doc.replaceRange(
           `!audio[${savedFile.name}](notesfile://${savedFile.fileName})`,
           cursor
