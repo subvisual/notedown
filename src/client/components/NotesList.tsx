@@ -6,9 +6,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { ConfirmationDialog } from "./ConfirmationDialog";
 import { NotePreview } from "./NotePreview";
 
-import { getFocusedNoteId, getDeletingNote } from "../selectors";
+import { getFocusedNoteId, getDeletingNote } from "selectors";
 import { notesRemove, notesDelete } from "../notes";
-import { Note } from "../../models/types";
+import { Note } from "models/types";
 
 const Root = styled.div`
   position: relative;
@@ -17,6 +17,12 @@ const Root = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  padding-right: 3rem;
+  padding-left: 1rem;
+
+  @media (max-width: 900px) {
+    padding-right: 1rem;
+  }
 `;
 
 const Inside = styled.div`

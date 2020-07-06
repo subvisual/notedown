@@ -28,11 +28,13 @@ import {
   notesSelect,
   notesSelectDebounced,
   notesSyncFolder,
+  notesEdit,
 } from "./actions";
 import * as Sync from "../../models/sync";
 import * as Notes from "../../models/notes";
 import * as Index from "../../models/index";
 import { RootState } from "../../models/types";
+import { modeSet } from "mode";
 
 export const notesSaveIndexEpic = (
   action$: ActionsObservable<
@@ -179,6 +181,15 @@ export const notesSyncFolderEpic = (
     ignoreElements()
   );
 
+export const notesEditFocuEpic = (
+  action$: ActionsObservable<ReturnType<typeof notesEdit>>
+) =>
+  action$.pipe(
+    ofType(notesEdit.type),
+    debounceTime(20),
+    mergeMap(() => of(modeSet("editor")))
+  );
+
 export const notesEpics = [
   loadNotesEpic,
   notesAddEpic,
@@ -191,4 +202,5 @@ export const notesEpics = [
   notesSyncFolderEpic,
   notesOnboardingEpic,
   notesSaveIndexEpic,
+  notesEditFocuEpic,
 ];

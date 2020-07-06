@@ -21,6 +21,10 @@ const NoteHeader = styled.div`
   align-items: center;
   padding-left: 1.5rem;
   margin-bottom: 0.5rem;
+
+  @media (max-width: 900px) {
+    padding-left: 1rem;
+  }
 `;
 
 const Root = styled.div<{ selected: boolean }>`
@@ -39,6 +43,10 @@ const Root = styled.div<{ selected: boolean }>`
   width: 100%;
   margin-bottom: 2rem;
   border-radius: 4px;
+
+  @media (max-width: 900px) {
+    padding: 1rem;
+  }
 
   audio {
     width: 100%;
@@ -133,6 +141,7 @@ const NoteActions = styled.div<{ selected: boolean }>`
   display: inline-flex;
   margin-left: 1rem;
   opacity: 0;
+
   ${({ selected }) =>
     selected &&
     css`

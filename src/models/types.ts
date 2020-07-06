@@ -37,6 +37,7 @@ export interface ModeState {
     | "tips"
     | "shortcuts"
     | "colorPicker"
+    | "notes"
     | "search"
     | "editor"
     | "editorFocus";

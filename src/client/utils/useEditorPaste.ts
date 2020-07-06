@@ -7,6 +7,8 @@ export const useEditorPaste = (
   editor: CodeMirror.Editor
 ) => {
   React.useLayoutEffect(() => {
+    if (!ref.current || !editor) return;
+
     const onPaste = async (_event: Event) => {
       const image = electron.clipboard.readImage();
       if (image.isEmpty()) return;

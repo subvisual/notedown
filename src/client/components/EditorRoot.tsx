@@ -6,13 +6,15 @@ export default styled.div<{ center: boolean }>`
   position: relative;
   background: ${({ theme }) => theme.background1};
   border-radius: 0.5rem;
-  flex-basis: 600px;
-  flex-grow: 0;
-  flex-shrink: 1;
+  flex: 1;
   overflow: scroll;
   padding: 1rem 0 0.8rem ${({ center }) => (center ? "0" : "3rem")};
   cursor: text;
   color: ${({ theme }) => textColorForBackground(theme.background1)};
+
+  @media (max-width: 900px) {
+    padding: 1rem 2rem;
+  }
 
   img {
     max-height: 200px;
