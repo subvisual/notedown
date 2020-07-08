@@ -11,7 +11,7 @@ interface IndexNote {
 
 elasticlunr.tokenizer.setSeperator(/[\s\-\]/[\.]+/);
 
-const idx = elasticlunr<IndexNote>(function () {
+let idx = elasticlunr<IndexNote>(function () {
   this.addField("createdAt");
   this.addField("content");
   this.setRef("id");
@@ -41,7 +41,6 @@ export const hasSavedIndex = (): boolean => {
 };
 
 export const loadIndex = async () => {
-  const data = fs.promises.readFile(indexFile);
-  //@ts-ignore
-  idx.load(JSON.parse(data));
+  const data = await fs.promises.readFile(indexFile, "utf-8");
+  idx = elasticlunr.Index.load(JSON.parse(data));
 };

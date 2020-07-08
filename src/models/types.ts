@@ -1,3 +1,5 @@
+import { LowdbAsync } from "lowdb";
+
 export interface ThemeColors {
   background1: string;
   background2: string;
@@ -32,6 +34,10 @@ export interface ThemeState {
   colors: ThemeColors;
 }
 
+export interface DatabaseState {
+  db: LowdbAsync<Database>;
+}
+
 export interface ModeState {
   name:
     | "tips"
@@ -54,6 +60,7 @@ export interface RootState {
   theme: ThemeState;
   mode: ModeState;
   menuBar: MenuBarState;
+  db: DatabaseState;
 }
 
 export interface Database {

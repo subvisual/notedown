@@ -1,6 +1,6 @@
 import { orderBy } from "lodash";
 
-import { Note, NotesState } from "../../models/types";
+import { Note, NotesState } from "models/types";
 
 import {
   NotesActionTypes,

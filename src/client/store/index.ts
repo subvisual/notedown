@@ -4,6 +4,7 @@ import { combineEpics, createEpicMiddleware } from "redux-observable";
 import { notesReducer } from "../notes/reducers";
 import { themeReducer } from "../theme/reducers";
 import { modeReducer } from "../mode/reducers";
+import { databaseReducer } from "../database/reducers";
 
 import { notesEpics } from "../notes/epics";
 import { themeEpics } from "../theme/epics";
@@ -23,6 +24,7 @@ export default function configureStore() {
       notes: notesReducer,
       theme: themeReducer,
       mode: modeReducer,
+      db: databaseReducer,
     }),
     composeEnhancers(applyMiddleware(epicMiddleware))
   );

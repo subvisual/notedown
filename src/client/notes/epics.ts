@@ -49,10 +49,13 @@ export const notesSaveIndexEpic = (
     ignoreElements()
   );
 
-export const loadNotesEpic = (action$: ActionsObservable<NotesActionTypes>) =>
+export const loadNotesEpic = (
+  action$: ActionsObservable<NotesActionTypes>,
+  state$: StateObservable<RootState>
+) =>
   action$.pipe(
     ofType(notesLoad.type),
-    mergeMap(() => Notes.loadAll().then(notesLoadSuccess))
+    mergeMap(() => Notes.loadAll(state$.value.db.db).then(notesLoadSuccess))
   );
 
 export const notesOnboardingEpic = (
@@ -79,12 +82,13 @@ If this is your first time around, here are a few tips to get you started:
   );
 
 export const notesAddEpic = (
-  action$: ActionsObservable<ReturnType<typeof notesAdd>>
+  action$: ActionsObservable<ReturnType<typeof notesAdd>>,
+  state$: StateObservable<RootState>
 ) =>
   action$.pipe(
     ofType(notesAdd.type),
     mergeMap(({ payload }) =>
-      Notes.add({ content: payload }).then(notesAddSuccess)
+      Notes.add(state$.value.db.db, { content: payload }).then(notesAddSuccess)
     )
   );
 
@@ -109,20 +113,22 @@ export const notesUpdateOrAddEpic = (
   );
 
 export const notesRemoveEpic = (
-  action$: ActionsObservable<ReturnType<typeof notesRemove>>
+  action$: ActionsObservable<ReturnType<typeof notesRemove>>,
+  state$: StateObservable<RootState>
 ) =>
   action$.pipe(
     ofType(notesRemove.type),
-    tap(({ payload }) => Notes.remove(payload)),
+    tap(({ payload }) => Notes.remove(state$.value.db.db, payload)),
     ignoreElements()
   );
 
 export const notesUpdateEpic = (
-  action$: ActionsObservable<ReturnType<typeof notesUpdate>>
+  action$: ActionsObservable<ReturnType<typeof notesUpdate>>,
+  state$: StateObservable<RootState>
 ) =>
   action$.pipe(
     ofType(notesUpdate.type),
-    tap(({ payload }) => Notes.update(payload)),
+    tap(({ payload }) => Notes.update(state$.value.db.db, payload)),
     ignoreElements()
   );
 
@@ -149,7 +155,8 @@ export const notesSyncEpic = (
     | ReturnType<typeof notesAddSuccess>
     | ReturnType<typeof notesUpdate>
     | ReturnType<typeof notesRemove>
-  >
+  >,
+  state$: StateObservable<RootState>
 ) =>
   merge(
     interval(60000),
@@ -158,12 +165,13 @@ export const notesSyncEpic = (
     )
   ).pipe(
     debounceTime(5000),
-    tap(() => Sync.run()),
+    tap(() => Sync.run(state$.value.db.db)),
     mergeMap(() => of(notesLoad()))
   );
 
 export const notesSyncFolderEpic = (
-  action$: ActionsObservable<ReturnType<typeof notesSyncFolder>>
+  action$: ActionsObservable<ReturnType<typeof notesSyncFolder>>,
+  state$: StateObservable<RootState>
 ) =>
   action$.pipe(
     ofType(notesSyncFolder.type),
@@ -177,7 +185,7 @@ export const notesSyncFolderEpic = (
     filter((path) => !!path),
     mergeMap((path) => of(path[0])),
     filter((path) => isString(path)),
-    mergeMap((path) => Sync.setFolder(path)),
+    mergeMap((path) => Sync.setFolder(state$.value.db.db, path)),
     ignoreElements()
   );
 

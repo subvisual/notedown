@@ -2,22 +2,23 @@ import * as PDFJS from "pdfjs-dist";
 import * as shortid from "shortid";
 import { range, flatten, compact } from "lodash";
 import { format } from "date-fns";
+import { LowdbAsync } from "lowdb";
 
 import { Note } from "./types";
-import { db as DB } from "./database";
 import * as Index from "./index";
+import { Database } from "./types";
 
 //@ts-ignore
 import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
 PDFJS.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
-export const loadAll = async ({ db }: { db?: typeof DB } = { db: DB }) => {
+export const loadAll = async (db: LowdbAsync<Database>) => {
   return db.get("entries").reject({ deleted: true }).value();
 };
 
 export const add = async (
-  { content }: Pick<Note, "content">,
-  { db }: { db?: typeof DB } = { db: DB }
+  db: LowdbAsync<Database>,
+  { content }: Pick<Note, "content">
 ) => {
   const note = {
     id: shortid.generate(),
@@ -33,10 +34,7 @@ export const add = async (
   return note;
 };
 
-export const remove = async (
-  id: string,
-  { db }: { db?: typeof DB } = { db: DB }
-) => {
+export const remove = async (db: LowdbAsync<Database>, id: string) => {
   const note = db.get("entries").find({ id }).value();
 
   db.get("entries")
@@ -47,10 +45,7 @@ export const remove = async (
   Index.remove(id);
 };
 
-export const update = async (
-  note: Note,
-  { db }: { db?: typeof DB } = { db: DB }
-) => {
+export const update = async (db: LowdbAsync<Database>, note: Note) => {
   db.get("entries")
     .find({ id: note.id })
     .assign({ ...note, updatedAt: new Date() })
@@ -59,10 +54,7 @@ export const update = async (
   return;
 };
 
-export const updateOrInsert = async (
-  note: Note,
-  { db }: { db?: typeof DB } = { db: DB }
-) => {
+export const updateOrInsert = async (db: LowdbAsync<Database>, note: Note) => {
   if (!note) return;
 
   const found = db.get("entries").find({ id: note.id }).value();
@@ -83,15 +75,16 @@ export const updateOrInsert = async (
   }
 };
 
-(async () => {
+export const hydrateIndex = async (db: LowdbAsync<Database>) => {
   try {
     await Index.loadIndex();
   } catch (e) {
-    loadAll().then((notes) =>
+    console.error(e);
+    loadAll(db).then((notes) =>
       notes.map(async (note) => Index.add(await formatDocumentForIndex(note)))
     );
   }
-})();
+};
 
 async function formatDocumentForIndex(note: Note) {
   let content = note.content;

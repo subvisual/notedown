@@ -40,3 +40,5 @@ export const getMode = (state: RootState) => state.mode.name;
 
 export const getWritingFocusMode = (state: RootState) =>
   state.mode.name === "editorFocus";
+
+export const getDb = (state: RootState) => state.db.db;

@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as low from "lowdb";
-import * as FileSync from "lowdb/adapters/FileSync";
+import * as FileAsync from "lowdb/adapters/FileAsync";
 import { app } from "electron";
 
 import { Database } from "./types";
@@ -17,9 +17,9 @@ if (isRenderer) {
 export const databaseFile = `${localApp.getPath("userData")}/.timeline.json`;
 export const indexFile = `${localApp.getPath("userData")}/.index.json`;
 
-export const createDatabase = (file: string) => {
-  const adapter = new FileSync<Database>(file);
-  const db = low(adapter);
+export const createDatabase = async (file: string = databaseFile) => {
+  const adapter = new FileAsync<Database>(file);
+  const db = await low(adapter);
 
   db.defaults({
     entries: [],
@@ -36,5 +36,3 @@ export const createDatabase = (file: string) => {
 if (!fs.existsSync(databaseFile)) {
   fs.closeSync(fs.openSync(databaseFile, "w"));
 }
-
-export const db = createDatabase(databaseFile);

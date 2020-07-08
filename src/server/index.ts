@@ -8,6 +8,7 @@ import * as os from "os";
 
 import * as Theme from "../models/theme";
 import { notesFileToFullPath } from "../models/files";
+import { createDatabase } from "../models/database";
 
 const filesFolder = path.join(app.getPath("userData"), "files");
 
@@ -52,7 +53,8 @@ async function createWindow() {
     );
   }
 
-  const colors = await Theme.get();
+  const db = await createDatabase();
+  const colors = await Theme.get(db);
 
   mainWindow = new BrowserWindow({
     backgroundColor: colors.background1,

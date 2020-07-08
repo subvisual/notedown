@@ -1,5 +1,5 @@
-import { Note, SearchResult } from "../../models/types";
-import createAction from "../utils/createAction";
+import { Note, SearchResult } from "models/types";
+import createAction from "utils/createAction";
 
 export const notesSelect = createAction("NOTES_SELECT")<Note>();
 export const notesSelectDebounced = createAction("NOTES_SELECT_DEBOUNCED")<

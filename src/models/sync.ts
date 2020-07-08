@@ -5,6 +5,8 @@ import * as fs from "fs";
 import { databaseFile, createDatabase } from "./database";
 import * as Notes from "./notes";
 import * as Files from "./files";
+import { LowdbAsync } from "lowdb";
+import { Database } from "./types";
 
 interface Settings {
   syncPath: string;
@@ -27,7 +29,7 @@ if (!fs.existsSync(settingsFile)) {
   fs.closeSync(fs.openSync(settingsFile, "w"));
 }
 
-export const setFolder = async (path: string) => {
+export const setFolder = async (db: LowdbAsync<Database>, path: string) => {
   let settings: Settings = { syncPath: null };
 
   try {
@@ -40,7 +42,7 @@ export const setFolder = async (path: string) => {
   settings.syncPath = path;
 
   await fsPromises.writeFile(settingsFile, JSON.stringify(settings));
-  return run();
+  return run(db);
 };
 
 export const getFolder = async () => {
@@ -48,7 +50,7 @@ export const getFolder = async () => {
   return settings.syncPath;
 };
 
-export const run = async () => {
+export const run = async (db: LowdbAsync<Database>) => {
   try {
     const syncFolder = await getFolder();
 
@@ -83,15 +85,15 @@ export const run = async () => {
       return;
     }
 
-    const syncDB = createDatabase(syncDataFile);
+    const syncDB = await createDatabase(syncDataFile);
 
-    const localNotes = await Notes.loadAll();
+    const localNotes = await Notes.loadAll(db);
     await Promise.all(
-      localNotes.map((note) => Notes.updateOrInsert(note, { db: syncDB }))
+      localNotes.map((note) => Notes.updateOrInsert(syncDB, note))
     );
 
-    const syncNotes = await Notes.loadAll({ db: syncDB });
-    await Promise.all(syncNotes.map((note) => Notes.updateOrInsert(note)));
+    const syncNotes = await Notes.loadAll(syncDB);
+    await Promise.all(syncNotes.map((note) => Notes.updateOrInsert(db, note)));
   } catch (e) {
     console.error(e);
   }

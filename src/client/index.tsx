@@ -7,14 +7,8 @@ import "./fonts.css";
 import "./utils/contextMenu";
 
 import App from "./App";
-import { themeLoad } from "./theme";
-import * as Sync from "../models/sync";
-
-Sync.run();
 
 const store = createStore();
-
-store.dispatch(themeLoad());
 
 ReactDOM.render(
   <Provider store={store}>

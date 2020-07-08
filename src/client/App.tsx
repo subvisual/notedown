@@ -8,6 +8,7 @@ Modal.setAppElement("#root");
 import { CustomThemeProvider } from "./components/CustomThemeProvider";
 import { HomePage } from "./components/HomePage";
 import { ColorPicker } from "./components/ColorPicker";
+import { DatabaseProvider } from "./components/DatabaseProvider";
 import { isDark } from "./utils/color";
 import { useMenu } from "./utils/useMenu";
 
@@ -64,9 +65,11 @@ export default function App() {
   return (
     <CustomThemeProvider>
       <>
-        <ColorPicker />
-        <Global />
-        <HomePage />
+        <DatabaseProvider>
+          <ColorPicker />
+          <Global />
+          <HomePage />
+        </DatabaseProvider>
       </>
     </CustomThemeProvider>
   );
