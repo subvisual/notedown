@@ -6,10 +6,12 @@ export function useKeyPress(
   cb: () => any
 ) {
   useEffect(() => {
-    function downHandler({ key, metaKey }: KeyboardEvent) {
-      if (key === targetKey && !!opts.metaKey === metaKey) {
-        cb();
-      }
+    function downHandler(event: KeyboardEvent) {
+      if (event.key !== targetKey) return;
+
+      if (!opts.metaKey && !event.metaKey && !event.ctrlKey) cb();
+
+      if (!!opts.metaKey && (event.metaKey || event.ctrlKey)) cb();
     }
 
     window.addEventListener("keydown", downHandler);
