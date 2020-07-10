@@ -74,6 +74,12 @@ export const Help = () => {
                 <em>j/down</em> - Select the note below.
               </li>
               <li>
+                <em>g</em> - Select the first note.
+              </li>
+              <li>
+                <em>G</em> - Select the last note.
+              </li>
+              <li>
                 <em>i/Cmd+N</em> - Focus on the editor.
               </li>
               <li>

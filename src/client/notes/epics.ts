@@ -137,7 +137,7 @@ export const notesSelectEpic = (
 ) =>
   action$.pipe(
     ofType(notesSelect.type),
-    throttle(() => interval(60), { leading: true, trailing: true }),
+    throttle(() => interval(50), { leading: true, trailing: true }),
     mergeMap(({ payload }) => of(notesSelectDebounced(payload)))
   );
 

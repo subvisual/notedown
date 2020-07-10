@@ -106,31 +106,39 @@ export function HomePage() {
 
   const colorPickerHandler = useCallback(() => {
     if (mode === "notes") dispatch(modeSet("colorPicker"));
-  }, [dispatch]);
+  }, [dispatch, mode]);
 
   const helpHandler = useCallback(() => {
     if (mode === "notes") dispatch(modeSet("tips"));
-  }, [dispatch]);
+  }, [dispatch, mode]);
 
   const searchHandler = useCallback(() => {
     if (mode === "notes") dispatch(modeSet("search"));
-  }, [dispatch]);
+  }, [dispatch, mode]);
 
   const editorHandler = useCallback(() => {
     if (mode === "notes") dispatch(modeSet("editor"));
-  }, [dispatch]);
+  }, [dispatch, mode]);
 
   const deleteHandler = useCallback(() => {
     if (mode === "notes") dispatch(notesDelete(null));
-  }, [dispatch]);
+  }, [dispatch, mode]);
 
   const shortcutsHandler = useCallback(() => {
     if (mode === "notes") dispatch(modeSet("shortcuts"));
-  }, [dispatch]);
+  }, [dispatch, mode]);
 
   const editorFocusHandler = useCallback(() => {
     if (mode === "notes") dispatch(modeSet("editorFocus"));
-  }, [dispatch]);
+  }, [dispatch, mode]);
+
+  const bottomHandler = useCallback(() => {
+    if (mode === "notes") dispatch(notesSelect(notes[notes.length - 1]));
+  }, [dispatch, mode, notesSelect, notes]);
+
+  const topHandler = useCallback(() => {
+    if (mode === "notes") dispatch(notesSelect(notes[0]));
+  }, [dispatch, mode, notesSelect, notes]);
 
   useKeyPress("/", undefined, searchHandler);
   useKeyPress("c", undefined, colorPickerHandler);
@@ -143,6 +151,8 @@ export function HomePage() {
   useKeyPress("n", undefined, editorFocusHandler);
   useKeyPress("k", undefined, upHandler);
   useKeyPress("j", undefined, downHandler);
+  useKeyPress("g", undefined, topHandler);
+  useKeyPress("G", undefined, bottomHandler);
   useKeyPress("ArrowUp", undefined, upHandler);
   useKeyPress("ArrowDown", undefined, downHandler);
 
