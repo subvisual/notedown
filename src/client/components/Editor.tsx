@@ -8,13 +8,14 @@ import "codemirror/mode/gfm/gfm";
 import "codemirror/lib/codemirror.css";
 import "codemirror/addon/display/placeholder";
 
-import { notesAdd, notesUpdate } from "notes/actions";
+import { notesAdd, notesUpdate, notesEditTmp } from "notes/actions";
 import { getEdit, getWritingFocusMode, getMode } from "selectors";
 import { useEditorPaste } from "utils/useEditorPaste";
 import { useEditorKeydown } from "utils/useEditorKeydown";
 import { useEditorNoteEdit } from "utils/useEditorNoteEdit";
 import { modeSet } from "mode";
 import EditorRoot from "./EditorRoot";
+import { debounce } from "lodash";
 
 const placeholder = "Write your thoughts or drag any files here";
 
@@ -36,6 +37,29 @@ export function Editor() {
     if (mode === "editor" || writingFocusMode) editor.focus();
     else editor.getInputField().blur();
   }, [mode, editor]);
+
+  React.useEffect(() => {
+    if (!editor) return;
+
+    const onChange = debounce(
+      () => {
+        const currentContent = editor.getValue();
+
+        if (noteEdit || currentContent)
+          dispatch(notesEditTmp({ ...noteEdit, content: currentContent }));
+        else dispatch(notesEditTmp(null));
+      },
+      500,
+      { maxWait: 2000, trailing: true }
+    );
+
+    editor.on("change", onChange);
+
+    return () => {
+      editor.off("change", onChange);
+      dispatch(notesEditTmp(null));
+    };
+  }, [editor, noteEdit, dispatch]);
 
   const extraKeys = React.useMemo(() => {
     return {

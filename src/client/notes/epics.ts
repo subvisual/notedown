@@ -7,6 +7,8 @@ import {
   ignoreElements,
   debounceTime,
   filter,
+  map,
+  catchError,
 } from "rxjs/operators";
 import { ofType, ActionsObservable } from "redux-observable";
 import { StateObservable } from "redux-observable";
@@ -28,12 +30,42 @@ import {
   notesSelectDebounced,
   notesSyncFolder,
   notesEdit,
+  notesEditTmp,
 } from "./actions";
 import * as Sync from "../../models/sync";
 import * as Notes from "../../models/notes";
 import * as Index from "../../models/index";
-import { RootState } from "../../models/types";
+import { RootState, Note } from "../../models/types";
 import { modeSet } from "mode";
+
+export const notesRestoreTmpState = (
+  action$: ActionsObservable<NotesActionTypes>
+) =>
+  action$.pipe(
+    ofType(notesLoad.type),
+    map(() => localStorage.getItem("tmpNotesEdit")),
+    filter((content: unknown) => {
+      return typeof content === "string" && content !== "";
+    }),
+    map((content: unknown) => JSON.parse(content as string)),
+    catchError((err) => {
+      console.error(err);
+      return of(null);
+    }),
+    mergeMap((note: unknown) => of(notesEdit(note as Note))),
+    tap((e: any) => console.log(e))
+  );
+
+export const notesSaveTmpState = (
+  action$: ActionsObservable<NotesActionTypes>
+) =>
+  action$.pipe(
+    ofType(notesEditTmp.type),
+    throttle(() => interval(500), { trailing: true }),
+    map(({ payload }) => (!!payload ? JSON.stringify(payload) : "")),
+    tap((content) => localStorage.setItem("tmpNotesEdit", content)),
+    ignoreElements()
+  );
 
 export const notesSaveIndexEpic = (
   action$: ActionsObservable<
@@ -171,7 +203,7 @@ export const notesSyncFolderEpic = (
     ignoreElements()
   );
 
-export const notesEditFocuEpic = (
+export const notesEditFocusEpic = (
   action$: ActionsObservable<ReturnType<typeof notesEdit>>
 ) =>
   action$.pipe(
@@ -191,5 +223,7 @@ export const notesEpics = [
   notesSyncFolderEpic,
   notesOnboardingEpic,
   notesSaveIndexEpic,
-  notesEditFocuEpic,
+  notesEditFocusEpic,
+  notesRestoreTmpState,
+  notesSaveTmpState,
 ];
