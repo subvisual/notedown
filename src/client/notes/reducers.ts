@@ -55,7 +55,8 @@ export function notesReducer(
         ...state,
         edit: null,
         notes: state.notes.map((note) => {
-          if (note.id === action.payload.id) return action.payload;
+          if (note.id === action.payload.id)
+            return { ...note, ...action.payload };
           else return note;
         }),
       };

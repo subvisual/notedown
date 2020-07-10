@@ -8,7 +8,7 @@ import "codemirror/mode/gfm/gfm";
 import "codemirror/lib/codemirror.css";
 import "codemirror/addon/display/placeholder";
 
-import { notesUpdateOrAdd } from "notes/actions";
+import { notesAdd, notesUpdate } from "notes/actions";
 import { getEdit, getWritingFocusMode, getMode } from "selectors";
 import { useEditorPaste } from "utils/useEditorPaste";
 import { useEditorKeydown } from "utils/useEditorKeydown";
@@ -42,28 +42,46 @@ export function Editor() {
       Esc: () => {
         if (mode === "editor" || writingFocusMode) dispatch(modeSet("notes"));
       },
-      "Ctrl-Enter": (codeMirror: CodeMirror.Editor) => {
-        dispatch(notesUpdateOrAdd({ content: codeMirror.getValue() }));
-        setImmediate(() => {
-          editor.getInputField().blur();
-          codeMirror.setValue("");
-        });
-      },
       "Shift-Ctrl-Enter": () => {
         dispatch(modeSet("editorFocus"));
       },
       "Shift-Cmd-Enter": () => {
         dispatch(modeSet("editorFocus"));
       },
+      "Ctrl-Enter": (codeMirror: CodeMirror.Editor) => {
+        if (noteEdit) {
+          dispatch(
+            notesUpdate({
+              ...noteEdit,
+              content: codeMirror.getValue(),
+            })
+          );
+        } else {
+          dispatch(notesAdd(codeMirror.getValue()));
+        }
+        setImmediate(() => {
+          editor.getInputField().blur();
+          codeMirror.setValue("");
+        });
+      },
       "Cmd-Enter": (codeMirror: CodeMirror.Editor) => {
-        dispatch(notesUpdateOrAdd({ content: codeMirror.getValue() }));
+        if (noteEdit) {
+          dispatch(
+            notesUpdate({
+              ...noteEdit,
+              content: codeMirror.getValue(),
+            })
+          );
+        } else {
+          dispatch(notesAdd(codeMirror.getValue()));
+        }
         setImmediate(() => {
           editor.getInputField().blur();
           codeMirror.setValue("");
         });
       },
     };
-  }, [mode, editor]);
+  }, [mode, editor, noteEdit, dispatch]);
 
   const onFocus = React.useCallback(() => {
     if (mode !== "editor" && !writingFocusMode) dispatch(modeSet("editor"));

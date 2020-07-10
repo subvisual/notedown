@@ -22,7 +22,6 @@ import {
   notesRemove,
   notesUpdate,
   notesLoad,
-  notesUpdateOrAdd,
   notesSearch,
   notesSearchResult,
   notesSelect,
@@ -92,26 +91,6 @@ export const notesAddEpic = (
     )
   );
 
-export const notesUpdateOrAddEpic = (
-  action$: ActionsObservable<ReturnType<typeof notesUpdateOrAdd>>,
-  state$: StateObservable<RootState>
-) =>
-  action$.pipe(
-    ofType(notesUpdateOrAdd.type),
-    mergeMap(({ payload }) => {
-      if (state$.value.notes.edit) {
-        return of(
-          notesUpdate({
-            ...state$.value.notes.edit,
-            ...payload,
-          })
-        );
-      } else {
-        return of(notesAdd(payload.content));
-      }
-    })
-  );
-
 export const notesRemoveEpic = (
   action$: ActionsObservable<ReturnType<typeof notesRemove>>,
   state$: StateObservable<RootState>
@@ -128,7 +107,10 @@ export const notesUpdateEpic = (
 ) =>
   action$.pipe(
     ofType(notesUpdate.type),
-    tap(({ payload }) => Notes.update(state$.value.db.db, payload)),
+    mergeMap(({ payload }) =>
+      of(state$.value.notes.notes.find((note) => note.id === payload.id))
+    ),
+    tap((note) => Notes.update(state$.value.db.db, note)),
     ignoreElements()
   );
 
@@ -203,7 +185,6 @@ export const notesEpics = [
   notesAddEpic,
   notesRemoveEpic,
   notesUpdateEpic,
-  notesUpdateOrAddEpic,
   notesSearchEpic,
   notesSelectEpic,
   notesSyncEpic,
