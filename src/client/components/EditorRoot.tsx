@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-import { textColorForBackground, shadeColor } from "../utils/color";
+import {
+  textColorForBackground,
+  shadeColor,
+  smallContrast,
+} from "../utils/color";
 
 export default styled.div<{ center: boolean }>`
   position: relative;
@@ -39,8 +43,7 @@ export default styled.div<{ center: boolean }>`
   }
 
   .cm-s-notes div.CodeMirror-selected {
-    background: ${({ theme }) => theme.background2};
-    color: ${({ theme }) => textColorForBackground(theme.background2)};
+    background: ${({ theme }) => smallContrast(theme.background1)};
   }
 
   //.cm-s-notes .CodeMirror-line::selection,

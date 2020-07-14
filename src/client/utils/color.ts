@@ -1,4 +1,5 @@
 function hexToRgb(hex: string) {
+import { memoize } from "lodash";
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? {
@@ -8,6 +9,49 @@ function hexToRgb(hex: string) {
       }
     : null;
 }
+
+const hexToHsl = memoize((hex: string) => {
+  let { r, g, b } = hexToRgb(hex);
+
+  r /= 255;
+  g /= 255;
+  b /= 255;
+
+  // Find greatest and smallest channel values
+  let cmin = Math.min(r, g, b),
+    cmax = Math.max(r, g, b),
+    delta = cmax - cmin,
+    h = 0,
+    s = 0,
+    l = 0;
+
+  // calculate hue
+  // no difference
+  if (delta == 0) h = 0;
+  // red is max
+  else if (cmax == r) h = ((g - b) / delta) % 6;
+  // green is max
+  else if (cmax == g) h = (b - r) / delta + 2;
+  // blue is max
+  else h = (r - g) / delta + 4;
+
+  h = Math.round(h * 60);
+
+  // make negative hues positive behind 360°
+  if (h < 0) h += 360;
+
+  // calculate lightness
+  l = (cmax + cmin) / 2;
+
+  // calculate saturation
+  s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+
+  // multiply l and s by 100
+  s = +(s * 100).toFixed(1);
+  l = +(l * 100).toFixed(1);
+
+  return { h, s, l };
+});
 
 export function isDark(hex: string, threshold = 125) {
   const { r, g, b } = hexToRgb(hex);
@@ -44,4 +88,13 @@ export function shadeColor(color: string, percent: number) {
   const BB = B.toString(16).length == 1 ? "0" + B.toString(16) : B.toString(16);
 
   return "#" + RR + GG + BB;
+}
+
+export function smallContrast(color: string) {
+  let { h, s, l } = hexToHsl(color);
+
+  if (l > 50) l -= 15;
+  else l += 15;
+
+  return `hsl(${h},${s}%,${l}%)`;
 }
