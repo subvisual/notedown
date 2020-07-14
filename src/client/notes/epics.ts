@@ -9,6 +9,7 @@ import {
   filter,
   map,
   catchError,
+  take,
 } from "rxjs/operators";
 import { ofType, ActionsObservable, StateObservable } from "redux-observable";
 import { remote } from "electron";
@@ -42,6 +43,7 @@ export const notesRestoreTmpState = (
 ) =>
   action$.pipe(
     ofType(notesLoad.type),
+    take(1),
     map(() => localStorage.getItem("tmpNotesEdit")),
     filter((content: unknown) => {
       return typeof content === "string" && content !== "";

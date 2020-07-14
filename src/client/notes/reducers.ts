@@ -53,7 +53,6 @@ export function notesReducer(
     case notesUpdate.type:
       return {
         ...state,
-        edit: null,
         notes: state.notes.map((note) => {
           if (note.id === action.payload.id)
             return { ...note, ...action.payload };

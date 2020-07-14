@@ -8,7 +8,7 @@ import "codemirror/mode/gfm/gfm";
 import "codemirror/lib/codemirror.css";
 import "codemirror/addon/display/placeholder";
 
-import { notesAdd, notesUpdate, notesEditTmp } from "notes/actions";
+import { notesAdd, notesUpdate, notesEditTmp, notesEdit } from "notes/actions";
 import { getEdit, getWritingFocusMode, getMode } from "selectors";
 import { useEditorPaste } from "utils/useEditorPaste";
 import { useEditorKeydown } from "utils/useEditorKeydown";
@@ -80,6 +80,7 @@ export function Editor() {
               content: codeMirror.getValue(),
             })
           );
+          dispatch(notesEdit(null));
         } else {
           dispatch(notesAdd(codeMirror.getValue()));
         }
@@ -96,6 +97,7 @@ export function Editor() {
               content: codeMirror.getValue(),
             })
           );
+          dispatch(notesEdit(null));
         } else {
           dispatch(notesAdd(codeMirror.getValue()));
         }
