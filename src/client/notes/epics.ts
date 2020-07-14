@@ -10,8 +10,7 @@ import {
   map,
   catchError,
 } from "rxjs/operators";
-import { ofType, ActionsObservable } from "redux-observable";
-import { StateObservable } from "redux-observable";
+import { ofType, ActionsObservable, StateObservable } from "redux-observable";
 import { remote } from "electron";
 
 const { dialog } = remote;

@@ -8,10 +8,12 @@ import { databaseReducer } from "../database/reducers";
 
 import { notesEpics } from "../notes/epics";
 import { themeEpics } from "../theme/epics";
+import { modeEpics } from "../mode/epics";
 
 export const rootEpic = combineEpics.apply(this, [
   ...notesEpics,
   ...themeEpics,
+  ...modeEpics,
 ]);
 
 const composeEnhancers =

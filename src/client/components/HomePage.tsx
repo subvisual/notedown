@@ -1,16 +1,14 @@
 import * as React from "react";
-import { useEffect, useCallback } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { findIndex } from "lodash";
 
-import { useKeyPress } from "../utils/useKeyPress";
 import { NotesList } from "./NotesList";
 import { Editor } from "./Editor";
 import { Help } from "./Help";
 import { MenuBar } from "./MenuBar";
-import { notesLoad, notesEdit, notesSelect, notesDelete } from "../notes";
-import { modeSet } from "../mode";
+import { notesLoad } from "../notes";
+import { modeHandleKey } from "../mode";
 import {
   getSelected,
   getSearchResultNotes,
@@ -81,80 +79,27 @@ export function HomePage() {
   const mode = useSelector(getMode);
   const writingFocusMode = useSelector(getWritingFocusMode);
 
-  const selectedIndex = React.useMemo(
-    () => selected && findIndex(notes, { id: selected.id }),
-    [notes, selected]
-  );
-
   useEffect(() => {
     dispatch(notesLoad());
   }, []);
 
-  const downHandler = useCallback(() => {
-    const index = selected ? Math.min(selectedIndex + 1, notes.length - 1) : 0;
-    dispatch(notesSelect(notes[index]));
-  }, [dispatch, notesSelect, notes, selectedIndex]);
+  useEffect(() => {
+    if (!dispatch) return;
 
-  const upHandler = useCallback(() => {
-    const index = selected ? Math.max(selectedIndex - 1, 0) : 0;
-    dispatch(notesSelect(notes[index]));
-  }, [dispatch, notesSelect, notes, selectedIndex]);
+    const handler = (event: KeyboardEvent) => {
+      dispatch(
+        modeHandleKey({
+          key: event.key,
+          ctrlKey: !!event.ctrlKey,
+          metaKey: !!event.metaKey,
+        })
+      );
+    };
 
-  const editHandler = useCallback(() => {
-    dispatch(notesEdit());
-  }, [dispatch, selected]);
+    window.addEventListener("keydown", handler);
 
-  const colorPickerHandler = useCallback(() => {
-    if (mode === "notes") dispatch(modeSet("colorPicker"));
-  }, [dispatch, mode]);
-
-  const helpHandler = useCallback(() => {
-    if (mode === "notes") dispatch(modeSet("tips"));
-  }, [dispatch, mode]);
-
-  const searchHandler = useCallback(() => {
-    if (mode === "notes") dispatch(modeSet("search"));
-  }, [dispatch, mode]);
-
-  const editorHandler = useCallback(() => {
-    if (mode === "notes") dispatch(modeSet("editor"));
-  }, [dispatch, mode]);
-
-  const deleteHandler = useCallback(() => {
-    if (mode === "notes") dispatch(notesDelete(null));
-  }, [dispatch, mode]);
-
-  const shortcutsHandler = useCallback(() => {
-    if (mode === "notes") dispatch(modeSet("shortcuts"));
-  }, [dispatch, mode]);
-
-  const editorFocusHandler = useCallback(() => {
-    if (mode === "notes") dispatch(modeSet("editorFocus"));
-  }, [dispatch, mode]);
-
-  const bottomHandler = useCallback(() => {
-    if (mode === "notes") dispatch(notesSelect(notes[notes.length - 1]));
-  }, [dispatch, mode, notesSelect, notes]);
-
-  const topHandler = useCallback(() => {
-    if (mode === "notes") dispatch(notesSelect(notes[0]));
-  }, [dispatch, mode, notesSelect, notes]);
-
-  useKeyPress("/", undefined, searchHandler);
-  useKeyPress("c", undefined, colorPickerHandler);
-  useKeyPress("e", undefined, editHandler);
-  useKeyPress("f", undefined, searchHandler);
-  useKeyPress("h", undefined, helpHandler);
-  useKeyPress("s", undefined, shortcutsHandler);
-  useKeyPress("i", undefined, editorHandler);
-  useKeyPress("d", undefined, deleteHandler);
-  useKeyPress("n", undefined, editorFocusHandler);
-  useKeyPress("k", undefined, upHandler);
-  useKeyPress("j", undefined, downHandler);
-  useKeyPress("g", undefined, topHandler);
-  useKeyPress("G", undefined, bottomHandler);
-  useKeyPress("ArrowUp", undefined, upHandler);
-  useKeyPress("ArrowDown", undefined, downHandler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [dispatch, notes]);
 
   return (
     <>
