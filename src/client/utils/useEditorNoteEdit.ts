@@ -11,11 +11,12 @@ export const useEditorNoteEdit = (
 
     if (noteEdit && noteEdit.content) {
       editor.setValue(noteEdit.content);
-      editor.focus();
-      editor.execCommand("goDocEnd");
+      setTimeout(() => {
+        editor.refresh();
+        editor.execCommand("goDocEnd");
+      }, 100);
     } else {
       editor.setValue("");
-      editor.focus();
     }
   }, [editor, noteEdit]);
 };
