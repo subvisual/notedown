@@ -1,5 +1,6 @@
-function hexToRgb(hex: string) {
 import { memoize } from "lodash";
+
+const hexToRgb = memoize((hex: string) => {
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? {
@@ -8,7 +9,7 @@ import { memoize } from "lodash";
         b: parseInt(result[3], 16),
       }
     : null;
-}
+});
 
 const hexToHsl = memoize((hex: string) => {
   let { r, g, b } = hexToRgb(hex);
@@ -59,16 +60,16 @@ export function isDark(hex: string, threshold = 125) {
   return (r * 299 + g * 587 + b * 114) / 1000 < threshold;
 }
 
-export function textColorForBackground(backgroundColor: string) {
+export const textColorForBackground = memoize((backgroundColor: string) => {
   if (isDark(backgroundColor)) return "#FFFFFF";
   else return "#333333";
-}
+});
 
-export function shadowColorForBackground(backgroundColor: string) {
+export const shadowColorForBackground = memoize((backgroundColor: string) => {
   if (isDark(backgroundColor)) return "rgba(0, 0, 0, 1)";
   else if (isDark(backgroundColor, 170)) return "rgba(0, 0, 0, 0.50)";
   else return "rgba(0, 0, 0, 0.25)";
-}
+});
 
 export function shadeColor(color: string, percent: number) {
   const p = isDark(color) ? percent : -1 * percent;
