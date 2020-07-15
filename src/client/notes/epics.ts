@@ -99,7 +99,8 @@ export const notesOnboardingEpic = (
     filter((count) => count === 0),
     mergeMap(() =>
       of(
-        notesAdd(`
+        notesAdd({
+          content: `
 Hi!
 
 If this is your first time around, here are a few tips to get you started:
@@ -108,7 +109,8 @@ If this is your first time around, here are a few tips to get you started:
 2. NoteDown was designed around searching. Write everything down and use the seach _Cmd+f_ to look it up when necessary.
 3. Your focus can be on the notes list, the editor, the search input or other modals. To restore the focus back to the notes list, press _Escape_.
 4. From the notes list, press _s_ to see all the available shortcuts, or _h_ for more tips.
-`)
+`,
+        })
       )
     )
   );
@@ -120,7 +122,7 @@ export const notesAddEpic = (
   action$.pipe(
     ofType(notesAdd.type),
     mergeMap(({ payload }) =>
-      Notes.add(state$.value.db.db, { content: payload }).then(notesAddSuccess)
+      Notes.add(state$.value.db.db, payload).then(notesAddSuccess)
     )
   );
 

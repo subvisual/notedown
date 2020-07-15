@@ -13,6 +13,7 @@ export type Note = {
   deleted: boolean;
   id: string;
   updatedAt: Date;
+  history?: object;
 };
 
 export type SearchResult = {

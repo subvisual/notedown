@@ -78,11 +78,14 @@ export function Editor() {
             notesUpdate({
               ...noteEdit,
               content: codeMirror.getValue(),
+              history: editor.getHistory(),
             })
           );
-          dispatch(notesEdit(null));
         } else {
-          dispatch(notesAdd(codeMirror.getValue()));
+          notesAdd({
+            content: codeMirror.getValue(),
+            history: editor.getHistory(),
+          });
         }
         setImmediate(() => {
           editor.getInputField().blur();
@@ -95,11 +98,16 @@ export function Editor() {
             notesUpdate({
               ...noteEdit,
               content: codeMirror.getValue(),
+              history: editor.getHistory(),
             })
           );
-          dispatch(notesEdit(null));
         } else {
-          dispatch(notesAdd(codeMirror.getValue()));
+          dispatch(
+            notesAdd({
+              content: codeMirror.getValue(),
+              history: editor.getHistory(),
+            })
+          );
         }
         setImmediate(() => {
           editor.getInputField().blur();

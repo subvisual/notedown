@@ -10,7 +10,9 @@ export const notesRemove = createAction("NOTES_REMOVE")<string>();
 export const notesUpdate = createAction("NOTES_UPDATE")<Note>();
 export const notesEdit = createAction("NOTES_EDIT")<Note>();
 export const notesEditTmp = createAction("NOTES_EDIT_TMP")<Note>();
-export const notesAdd = createAction("NOTES_ADD")<string>();
+export const notesAdd = createAction("NOTES_ADD")<
+  Pick<Note, "content" | "history">
+>();
 export const notesAddSuccess = createAction("NOTES_ADD_SUCCESS")<Note>();
 export const notesLoad = createAction("NOTES_LOAD")();
 export const notesLoadSuccess = createAction("NOTES_LOAD_SUCCESS")<Note[]>();
