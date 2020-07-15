@@ -1,52 +1,71 @@
 # ![NoteDown](./assets/github_logo.png)
 
-NoteDown is a note-taking app.
+NoteDown is a note-taking application built for **speed** and **power**.
 
 ![Screenshot](./assets/demo.png)
 
-But it's not like every other app. The principles behind the design of NoteDown are:
+The five principles behind the design of NoteDown are:
 
-- Keyboard-driven. Almost everything should be accomplished through a shortcut.
-- Private. There are no severs and accounts. Nothing leaves your computer so
-  you don't have to trust anyone.
-- Simple. You can write markdown and drop/paste media files.
+- Keyboard-driven workflow. Almost everything should be available through the keyboard.
+- Local. Your notes never leave your computer.
+- Text-based. Notes are just text written in Markdown.
+- Multimedia. It must allow for images, PDFs, audio files, etc.
+- Customizable. The defaults have to be good, but you need to be able to change them.
 
-**Get the latest version from [releases page](https://github.com/subvisual/notedown/releases)**
+**Get the latest version from the [releases page](https://github.com/subvisual/notedown/releases)**
 
-## Features
+## Functionality
+
+Most note-taking applications work as a wiki: you can write titles for your notes, organize them by folder, assign tags, etc. NoteDown takes a different approach and it's more like a diary, or a scratchpad: you just write everything, anything, one note after the other in chronological order.
+
+NoteDown is only for the capture and retrieval of information. Put everything into it, and use the search when you need it.
+
+Besides text, you can add files to save them alongside your notes. Some files have special properties
+
+- Images will show in both the editor and the notes list.
+- The text inside a PDF will be indexed and you can search for it.
+- Audio files will show a player.
+- Youtube links will embed a player.
+- There will be more to come.
+
+but you can upload any file type.
+
+Everything you put into it, NoteDown will and make available through the search.
 
 ### The Editor
 
-NoteDown demands that you write notes in [Markdown](https://daringfireball.net/projects/markdown/syntax). That's the only way to use it to its full potential. Besides writing Markdown:
+NoteDown demands that you write in [Markdown](https://daringfireball.net/projects/markdown/syntax), and that's the only way to use it to its full potential. But the editor is not limited to writing Markdown:
 
-- You can drop a file from the file system to save it to NoteDown. A Markdown link to
+- You can drop a file from the file system. A Markdown link to
   that file will be inserted at the cursor's position. For images and audio
   files, a Markdown embed will be inserted.
-- You can paste images from the browser or the file system. The image will be saved to NoteDown, and a Markdown embed will be placed at the cursor's position.
-- Pasting links (only links) will transform them into Markdown links.
-- Images will have a preview bellow. We'll be adding more widgets for other elements.
+- You can paste images from the browser or the file system. A Markdown embed will be placed at the cursor's position.
+- Pasting a link will transform it into a Markdown links.
+- Images will have a preview bellow the link. We'll be adding more widgets for other elements.
 - Writing lists will automatically insert and remove the `*` and `nr.`.
 
-Besides the original syntax, we extended Markdown to allow:
+NoteDown also extends Markdown to allow:
 
-- embedding audio files using the syntax `!audio[file name](file url)`.
-- embedding Youtube videos using the syntax `!youtube[file name](link to video)`.
+- Embedding audio files using the syntax `!audio[file name](file url)`.
+- Embedding Youtube videos using the syntax `!youtube[file name](link to video)`.
 
 ### Searching
 
-NoteDown is like a diary. You write one note after the other. Time is the only thing connecting notes. To find something, you can either scroll all the way down, or use search input. You should use the search as it works in text, file names, links, it even works for text inside PDFs!
+NoteDown works like a diary, where you write one note after the other. Time is the only thing connecting notes. To find something, you can either scroll all the way down or use the search. You should use the search as it works in text, file names, links, it even works for text inside PDFs!
 
-Since you cannot use tags or links like in other note-taking applications, they way to relate information is with keywords. For instance, all my notes related to NoteDown start, or end, with the word `@notedown`. This makes it very easy for me to look it up. When I need to save a link to a page talking about Vim, I paste the link and then write a couple of related words such as `vim` , `editor` or `workflow`.
+Since you cannot use tags or links like in other note-taking applications, the way to relate information is with keywords. For instance, all my notes related to NoteDown start, or end, with the word `@notedown`. This makes it very easy for me to look it up. When I need to save a link to a page talking about Vim, I paste the link and then write a couple of related words such as `vim`, `editor`, or `workflow`.
 
-### Notes Explorer
+### Notes List
+
+The notes list allows you to perform operations on individual notes: open in the editor, delete, open in focus mode, etc. There are a lot of shortcuts when you're focused in the notes list.
 
 ### Backup
 
-Because all your notes and files will be saved to your computer, you should take some precautions to backup your data. On the menu, there's an option for "Sync Folder". This is a two-way mechanism to sync notes to and from a folder. You can use it to back-up notes to Google Drive for instance. You can even use it to sync notes between two computers using NoteDown, but I advise caution on this one, as I haven't tested this thoroughly.
+Your notes and files are saved to your computer only, so you should take some precautions to backup your data. On the menu, there's an option called "Sync Folder". This is a two-way mechanism to sync notes to and from a folder. You can use it to back-up notes to Google Drive for instance. You can even use it to sync notes between two computers using NoteDown, but I advise caution on this one, as I haven't tested it thoroughly.
 
 ### Tips
 
-- NoteDown comes with a few themes for you to choose from, but you can pick your colors and NoteDown will adjust some things, such as the text, to match the necessary contrast for them.
+- NoteDown comes with a few themes for you to choose from, but you can pick your colors and NoteDown will adjust some things around them, such as the text, to have the necessary contrast for them.
 - Use the "focus" mode to hide everything but the editor.
 
 ### Todo
