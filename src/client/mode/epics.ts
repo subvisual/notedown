@@ -19,7 +19,9 @@ export const modeNotesKeyEpic = (
   action$.pipe(
     filter(() => state$.value.mode.name === "notes"),
     ofType(modeHandleKey.type),
-    mergeMap(({ payload: { key } }) => {
+    mergeMap(({ payload: { key, ctrlKey, metaKey } }) => {
+      if (ctrlKey || metaKey) return of();
+
       if (key === "/" || key === "f") {
         // SEARCH
         return of(modeSet("search"));
