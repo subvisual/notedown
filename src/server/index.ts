@@ -119,6 +119,16 @@ async function createWindow() {
 }
 
 app.allowRendererProcessReuse = true;
+app.setAsDefaultProtocolClient("notedown");
+
+app.on("open-url", async function (event, data) {
+  if (mainWindow === null) {
+    await createWindow();
+  }
+
+  event.preventDefault();
+  mainWindow.webContents.send("open-url", data);
+});
 
 app.on("ready", createWindow);
 

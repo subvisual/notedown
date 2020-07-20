@@ -36,7 +36,13 @@
     },
     "files": [
       "build/**/*"
-    ]
+    ],
+    "protocols": {
+      "name": "notedown-protocol",
+      "schemes": [
+        "notedown"
+      ]
+    }
   },
   "dependencies": {},
   "devDependencies": {
