@@ -73,7 +73,7 @@ export function Editor() {
         dispatch(modeSet("editorFocus"));
       },
       "Ctrl-Enter": (codeMirror: CodeMirror.Editor) => {
-        if (noteEdit) {
+        if (noteEdit && noteEdit.id) {
           dispatch(
             notesUpdate({
               ...noteEdit,
@@ -93,7 +93,7 @@ export function Editor() {
         });
       },
       "Cmd-Enter": (codeMirror: CodeMirror.Editor) => {
-        if (noteEdit) {
+        if (noteEdit && noteEdit.id) {
           dispatch(
             notesUpdate({
               ...noteEdit,
