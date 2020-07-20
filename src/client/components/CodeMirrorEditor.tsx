@@ -95,6 +95,10 @@ export const CodeMirrorEditor = ({
             line: to.line,
             ch: from.ch + text[0].length,
           });
+          codeMirror.setSelection(
+            { line: to.line, ch: from.ch + 1 },
+            { line: to.line, ch: from.ch + 1 + text[0].length }
+          );
         }
       }
 
