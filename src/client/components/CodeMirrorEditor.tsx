@@ -91,14 +91,22 @@ export const CodeMirrorEditor = ({
 
       if (origin === "paste") {
         if (isHref(text[0])) {
-          codeMirror.replaceRange(`[${text[0]}](${text[0]})`, from, {
-            line: to.line,
-            ch: from.ch + text[0].length,
+          setImmediate(() => {
+            codeMirror.replaceRange(
+              `[${text[0]}](${text[0]})`,
+              from,
+              {
+                line: to.line,
+                ch: from.ch + text[0].length,
+              },
+              "+notedown"
+            );
+
+            codeMirror.setSelection(
+              { line: to.line, ch: from.ch + 1 },
+              { line: to.line, ch: from.ch + 1 + text[0].length }
+            );
           });
-          codeMirror.setSelection(
-            { line: to.line, ch: from.ch + 1 },
-            { line: to.line, ch: from.ch + 1 + text[0].length }
-          );
         }
       }
 
