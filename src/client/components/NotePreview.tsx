@@ -94,6 +94,7 @@ const Root = styled.div<{ selected: boolean }>`
   }
 
   p {
+    word-break: break-word;
     margin: 0.5rem 0 1rem;
   }
 
