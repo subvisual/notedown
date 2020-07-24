@@ -62,6 +62,29 @@ export function Editor() {
   }, [editor, noteEdit, dispatch]);
 
   const extraKeys = React.useMemo(() => {
+    const save = (codeMirror: CodeMirror.Editor) => {
+      if (noteEdit && noteEdit.id) {
+        dispatch(
+          notesUpdate({
+            ...noteEdit,
+            content: codeMirror.getValue(),
+            history: editor.getHistory(),
+          })
+        );
+      } else {
+        dispatch(
+          notesAdd({
+            content: codeMirror.getValue(),
+            history: editor.getHistory(),
+          })
+        );
+      }
+      setImmediate(() => {
+        editor.getInputField().blur();
+        codeMirror.setValue("");
+      });
+    };
+
     return {
       Esc: () => {
         if (mode === "editor" || writingFocusMode) dispatch(modeSet("notes"));
@@ -73,46 +96,10 @@ export function Editor() {
         dispatch(modeSet("editorFocus"));
       },
       "Ctrl-Enter": (codeMirror: CodeMirror.Editor) => {
-        if (noteEdit && noteEdit.id) {
-          dispatch(
-            notesUpdate({
-              ...noteEdit,
-              content: codeMirror.getValue(),
-              history: editor.getHistory(),
-            })
-          );
-        } else {
-          notesAdd({
-            content: codeMirror.getValue(),
-            history: editor.getHistory(),
-          });
-        }
-        setImmediate(() => {
-          editor.getInputField().blur();
-          codeMirror.setValue("");
-        });
+        save(codeMirror);
       },
       "Cmd-Enter": (codeMirror: CodeMirror.Editor) => {
-        if (noteEdit && noteEdit.id) {
-          dispatch(
-            notesUpdate({
-              ...noteEdit,
-              content: codeMirror.getValue(),
-              history: editor.getHistory(),
-            })
-          );
-        } else {
-          dispatch(
-            notesAdd({
-              content: codeMirror.getValue(),
-              history: editor.getHistory(),
-            })
-          );
-        }
-        setImmediate(() => {
-          editor.getInputField().blur();
-          codeMirror.setValue("");
-        });
+        save(codeMirror);
       },
     };
   }, [mode, editor, noteEdit, dispatch]);
