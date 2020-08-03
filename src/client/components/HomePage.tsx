@@ -44,7 +44,7 @@ const Root = styled.div<{ hidePanel: boolean }>`
 const Left = styled.div<{ hide: boolean }>`
   display: flex;
   flex-direction: column;
-  flex-basis: 600px;
+  flex-basis: 700px;
   flex-grow: 0;
   flex-shrink: 1;
 
@@ -66,7 +66,7 @@ const Left = styled.div<{ hide: boolean }>`
 const Right = styled.div`
   display: flex;
   flex-direction: column;
-  flex-basis: 600px;
+  flex-basis: 700px;
   flex-grow: 0;
   flex-shrink: 1;
 `;

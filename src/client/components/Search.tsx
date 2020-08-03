@@ -10,7 +10,7 @@ const Root = styled.div<{ active: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: calc(1200px - 2rem);
+  max-width: calc(1400px - 2rem);
   margin: 0 5rem;
   width: 100%;
 
@@ -64,7 +64,7 @@ const Input = styled.input`
   color: ${({ theme }) =>
     shadeColor(textColorForBackground(theme.background1), 30)};
   font-size: 1rem;
-  max-width: calc(1200px - 2rem);
+  max-width: calc(1400px - 2rem);
   height: 2rem;
   outline: none;
   padding: 0 1rem;
