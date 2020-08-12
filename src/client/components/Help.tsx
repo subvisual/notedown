@@ -43,17 +43,13 @@ export const Help = () => {
         {currentMode === "tips" && (
           <ul>
             <li>Write in markdown.</li>
+            <li>Use full-text search.</li>
             <li>
               Drag and drop files from the file system or the browser to import
               them.
             </li>
             <li>Paste images to import them.</li>
             <li>Files are saved alongside the notes.</li>
-            <li>
-              Use <em>Sync Folder</em> from the menu to back-up your files to a
-              folder. You can use this to setup backups to a cloud provider. Two
-              computers could use this sync data.
-            </li>
             <li>
               <button onClick={() => dispatch(modeSet("colorPicker"))}>
                 Change the theme.

@@ -4,7 +4,7 @@ import { of } from "rxjs";
 
 import { modeHandleKey, modeSet } from "./actions";
 import { RootState, Note } from "models/types";
-import { getAllNotes, getSelected } from "selectors";
+import { getSearchResultNotes, getAllNotes, getSelected } from "selectors";
 import { findIndex } from "lodash";
 import { notesSelect, notesEdit, notesDelete } from "notes";
 
@@ -27,7 +27,7 @@ export const modeNotesKeyEpic = (
         return of(modeSet("search"));
       } else if (key === "j" || key === "ArrowDown") {
         // MOVE DOWN
-        const notes = getAllNotes(state$.value);
+        const notes = getSearchResultNotes(state$.value);
         const selected = getSelected(state$.value);
         const index = getSelectedNoteIndex(notes, selected);
         const newIndex = selected ? Math.min(index + 1, notes.length - 1) : 0;
@@ -35,7 +35,7 @@ export const modeNotesKeyEpic = (
         return of(notesSelect(notes[newIndex]));
       } else if (key === "k" || key === "ArrowUp") {
         // MOVE UP
-        const notes = getAllNotes(state$.value);
+        const notes = getSearchResultNotes(state$.value);
         const selected = getSelected(state$.value);
         const index = getSelectedNoteIndex(notes, selected);
         const newIndex = selected ? Math.max(index - 1, 0) : 0;

@@ -5,20 +5,18 @@ import { databaseLoad } from "database";
 import { createDatabase } from "models/database";
 import { getDb } from "../selectors";
 import { themeLoad } from "../theme";
-import * as Notes from "models/notes";
 
 export const DatabaseProvider = ({ children }: { children: any }) => {
   const dispatch = useDispatch();
   const db = useSelector(getDb);
-  const [indexLoaded, setIndexLoaded] = React.useState(false);
 
   React.useEffect(() => {
     if (!dispatch) return;
 
     (async () => {
-      const newDB = await createDatabase();
+      const db = await createDatabase();
 
-      dispatch(databaseLoad(newDB));
+      dispatch(databaseLoad({ db }));
     })();
   }, [dispatch]);
 
@@ -26,13 +24,9 @@ export const DatabaseProvider = ({ children }: { children: any }) => {
     if (!dispatch || !db) return;
 
     dispatch(themeLoad());
-    (async () => {
-      await Notes.hydrateIndex(db);
-      setIndexLoaded(true);
-    })();
-  }, [db, dispatch, setIndexLoaded]);
+  }, [db, dispatch]);
 
-  if (!db || !indexLoaded) return null;
+  if (!db) return null;
 
   return <>{children}</>;
 };

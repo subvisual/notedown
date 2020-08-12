@@ -27,7 +27,7 @@ export const Modal = ({
       style={{
         overlay: {
           backgroundColor: "rgba(0, 0, 0, 0.2)",
-          zIndex: 2,
+          zIndex: 4,
         },
         content: {
           backgroundColor: theme.colors.background1,

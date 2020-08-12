@@ -53,11 +53,18 @@ async function createWindow() {
     );
   }
 
-  const db = await createDatabase();
-  const colors = await Theme.get(db);
+  let colors = null;
+
+  try {
+    const db = await createDatabase();
+    colors = await Theme.get(db);
+    db.close();
+  } catch (e) {
+    console.error(e);
+  }
 
   mainWindow = new BrowserWindow({
-    backgroundColor: colors.background1,
+    backgroundColor: colors ? colors.background1 : undefined,
     height: 900,
     titleBarStyle: "hiddenInset",
     width: 1500,
@@ -118,7 +125,7 @@ async function createWindow() {
   });
 }
 
-app.allowRendererProcessReuse = true;
+app.allowRendererProcessReuse = false;
 app.setAsDefaultProtocolClient("notedown");
 
 app.on("open-url", async function (event, data) {

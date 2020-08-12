@@ -5,8 +5,8 @@ export const notesSelect = createAction("NOTES_SELECT")<Note>();
 export const notesSelectDebounced = createAction("NOTES_SELECT_DEBOUNCED")<
   Note
 >();
-export const notesDelete = createAction("NOTES_DELETE")<string>();
-export const notesRemove = createAction("NOTES_REMOVE")<string>();
+export const notesDelete = createAction("NOTES_DELETE")<number>();
+export const notesRemove = createAction("NOTES_REMOVE")<number>();
 export const notesUpdate = createAction("NOTES_UPDATE")<Note>();
 export const notesEdit = createAction("NOTES_EDIT")<Note>();
 export const notesEditTmp = createAction("NOTES_EDIT_TMP")<Note>();
@@ -21,10 +21,8 @@ export const notesSearch = createAction("NOTES_SEARCH")<string>();
 export const notesSearchResult = createAction("NOTES_SEARCH_RESULT")<
   SearchResult[]
 >();
-export const notesSyncFolder = createAction("NOTES_SYNC_FOLDER")();
 
 export type NotesActionTypes =
-  | ReturnType<typeof notesSyncFolder>
   | ReturnType<typeof notesSelectDebounced>
   | ReturnType<typeof notesSearchResult>
   | ReturnType<typeof notesSearch>

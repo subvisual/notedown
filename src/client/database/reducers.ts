@@ -8,7 +8,7 @@ export function databaseReducer(
 ): DatabaseState {
   switch (action.type) {
     case databaseLoad.type:
-      return { ...state, db: action.payload };
+      return { ...state, db: action.payload.db };
     default:
       return (
         state || {

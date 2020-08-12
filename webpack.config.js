@@ -43,6 +43,10 @@ module.exports = [
     module: {
       rules: [
         {
+          test: /\.sql$/,
+          loader: "raw-loader",
+        },
+        {
           test: /\.tsx?$/,
           loader: "ts-loader",
           exclude: /node_modules/,
@@ -58,6 +62,9 @@ module.exports = [
     output: {
       filename: "index.js",
       path: path.resolve(__dirname, "build/server/"),
+    },
+    externals: {
+      sqlite3: "commonjs sqlite3",
     },
     optimization: isDev
       ? {}
@@ -98,6 +105,10 @@ module.exports = [
           test: /\.(woff|woff2|eot|ttf|otf)$/,
           use: ["file-loader"],
         },
+        {
+          test: /\.sql$/,
+          use: "raw-loader",
+        },
       ],
     },
     resolve: {
@@ -110,6 +121,9 @@ module.exports = [
     output: {
       filename: "index.js",
       path: path.resolve(__dirname, "build/client/"),
+    },
+    externals: {
+      sqlite3: "commonjs sqlite3",
     },
     plugins: clientPlugins,
     optimization: isDev

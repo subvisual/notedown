@@ -1,10 +1,21 @@
 import { ThemeColors, Database } from "./types";
-import { LowdbAsync } from "lowdb";
 
-export const get = async (db: LowdbAsync<Database>) => {
-  return db.get("theme").value();
+export const get = async (db: Database) => {
+  const result = (await db.get(
+    "SELECT value FROM settings WHERE id='theme'"
+  )) as { value: string };
+
+  if (result && result.value) return JSON.parse(result.value) as ThemeColors;
+  else
+    return {
+      background1: "#2a2438",
+      background2: "#352f44",
+      accent1: "#411e8f",
+    };
 };
 
-export const set = async (db: LowdbAsync<Database>, colors: ThemeColors) => {
-  return db.get("theme").assign(colors).write();
+export const set = async (db: Database, colors: ThemeColors) => {
+  return db.run("UPDATE settings SET value = ? WHERE id = 'settings'", [
+    JSON.stringify(colors),
+  ]);
 };

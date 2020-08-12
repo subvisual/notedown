@@ -1,5 +1,8 @@
 import { LowdbAsync } from "lowdb";
 
+import { Database } from "./database/sqlite/database";
+export { Database } from "./database/sqlite/database";
+
 export interface ThemeColors {
   background1: string;
   background2: string;
@@ -11,20 +14,19 @@ export type Note = {
   content: string;
   createdAt: Date;
   deleted: boolean;
-  id: string;
-  updatedAt: Date;
   history?: object;
+  id: number;
+  updatedAt: Date;
 };
 
 export type SearchResult = {
-  ref: string;
-  score: number;
+  id: number;
 };
 
 export interface NotesState {
-  deleting?: string;
+  deleting?: number;
   edit?: Note;
-  focusId?: string;
+  focusId?: number;
   notes: Note[];
   searchQuery: string;
   searchResult: SearchResult[];
@@ -36,7 +38,7 @@ export interface ThemeState {
 }
 
 export interface DatabaseState {
-  db: LowdbAsync<Database>;
+  db: Database;
 }
 
 export interface ModeState {
@@ -50,21 +52,9 @@ export interface ModeState {
     | "editorFocus";
 }
 
-export interface MenuBarState {
-  show: boolean;
-  previewId: string;
-  previewOnHover: boolean;
-}
-
 export interface RootState {
   notes: NotesState;
   theme: ThemeState;
   mode: ModeState;
-  menuBar: MenuBarState;
   db: DatabaseState;
-}
-
-export interface Database {
-  entries: Note[];
-  theme: ThemeColors;
 }

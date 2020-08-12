@@ -1,7 +1,7 @@
-import { interval, of, merge } from "rxjs";
-import { isString } from "lodash";
+import { interval, of, merge, empty, from } from "rxjs";
 import {
   mergeMap,
+  mergeMapTo,
   throttle,
   tap,
   ignoreElements,
@@ -10,11 +10,9 @@ import {
   map,
   catchError,
   take,
+  concatMap,
 } from "rxjs/operators";
 import { ofType, ActionsObservable, StateObservable } from "redux-observable";
-import { remote } from "electron";
-
-const { dialog } = remote;
 
 import {
   NotesActionTypes,
@@ -28,13 +26,10 @@ import {
   notesSearchResult,
   notesSelect,
   notesSelectDebounced,
-  notesSyncFolder,
   notesEdit,
   notesEditTmp,
 } from "./actions";
-import * as Sync from "../../models/sync";
 import * as Notes from "../../models/notes";
-import * as Index from "../../models/index";
 import { RootState, Note } from "../../models/types";
 import { modeSet } from "mode";
 
@@ -53,8 +48,7 @@ export const notesRestoreTmpState = (
       console.error(err);
       return of(null);
     }),
-    mergeMap((note: unknown) => of(notesEdit(note as Note))),
-    tap((e: any) => console.log(e))
+    mergeMap((note: unknown) => of(notesEdit(note as Note)))
   );
 
 export const notesSaveTmpState = (
@@ -65,19 +59,6 @@ export const notesSaveTmpState = (
     throttle(() => interval(500), { trailing: true }),
     map(({ payload }) => (!!payload ? JSON.stringify(payload) : "")),
     tap((content) => localStorage.setItem("tmpNotesEdit", content)),
-    ignoreElements()
-  );
-
-export const notesSaveIndexEpic = (
-  action$: ActionsObservable<
-    | ReturnType<typeof notesAddSuccess>
-    | ReturnType<typeof notesUpdate>
-    | ReturnType<typeof notesRemove>
-  >
-) =>
-  action$.pipe(
-    ofType(notesAddSuccess.type, notesUpdate.type, notesRemove.type),
-    tap(() => Index.saveIndex()),
     ignoreElements()
   );
 
@@ -145,6 +126,7 @@ export const notesUpdateEpic = (
     mergeMap(({ payload }) =>
       of(state$.value.notes.notes.find((note) => note.id === payload.id))
     ),
+    filter((note) => !!note),
     tap((note) => Notes.update(state$.value.db.db, note)),
     ignoreElements()
   );
@@ -159,51 +141,21 @@ export const notesSelectEpic = (
   );
 
 export const notesSearchEpic = (
-  action$: ActionsObservable<ReturnType<typeof notesSearch>>
+  action$: ActionsObservable<ReturnType<typeof notesSearch>>,
+  state$: StateObservable<RootState>
 ) =>
   action$.pipe(
     ofType(notesSearch.type),
-    throttle(() => interval(200), { trailing: true }),
-    mergeMap(({ payload }) => Index.search(payload).then(notesSearchResult))
-  );
-
-export const notesSyncEpic = (
-  action$: ActionsObservable<
-    | ReturnType<typeof notesAddSuccess>
-    | ReturnType<typeof notesUpdate>
-    | ReturnType<typeof notesRemove>
-  >,
-  state$: StateObservable<RootState>
-) =>
-  merge(
-    interval(60000),
-    action$.pipe(
-      ofType(notesAddSuccess.type, notesRemove.type, notesUpdate.type)
-    )
-  ).pipe(
-    debounceTime(5000),
-    tap(() => Sync.run(state$.value.db.db)),
-    mergeMap(() => of(notesLoad()))
-  );
-
-export const notesSyncFolderEpic = (
-  action$: ActionsObservable<ReturnType<typeof notesSyncFolder>>,
-  state$: StateObservable<RootState>
-) =>
-  action$.pipe(
-    ofType(notesSyncFolder.type),
-    mergeMap(() =>
-      of(
-        dialog.showOpenDialogSync({
-          properties: ["openDirectory", "createDirectory"],
+    filter(({ payload }) => !!payload),
+    throttle(() => interval(500), { trailing: true, leading: false }),
+    concatMap(({ payload }) =>
+      from(Notes.search(state$.value.db.db, payload)).pipe(
+        catchError((_err) => {
+          return of([]);
         })
       )
     ),
-    filter((path) => !!path),
-    mergeMap((path) => of(path[0])),
-    filter((path) => isString(path)),
-    mergeMap((path) => Sync.setFolder(state$.value.db.db, path)),
-    ignoreElements()
+    mergeMap((results) => of(notesSearchResult(results)))
   );
 
 export const notesEditFocusEpic = (
@@ -222,10 +174,7 @@ export const notesEpics = [
   notesUpdateEpic,
   notesSearchEpic,
   notesSelectEpic,
-  notesSyncEpic,
-  notesSyncFolderEpic,
   notesOnboardingEpic,
-  notesSaveIndexEpic,
   notesEditFocusEpic,
   notesRestoreTmpState,
   notesSaveTmpState,

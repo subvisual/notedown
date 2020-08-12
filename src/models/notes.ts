@@ -1,105 +1,87 @@
 import * as PDFJS from "pdfjs-dist";
-import * as shortid from "shortid";
 import { range, flatten, compact } from "lodash";
-import { format } from "date-fns";
-import { LowdbAsync } from "lowdb";
 
-import { Note } from "./types";
-import * as Index from "./index";
-import { Database } from "./types";
+import { Note, Database } from "./types";
 
 //@ts-ignore
 import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
 PDFJS.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
-export const loadAll = async (db: LowdbAsync<Database>) => {
-  return db.get("entries").reject({ deleted: true }).value();
+export const search = async (db: Database, query: string) => {
+  return db.all(
+    "SELECT id FROM notes_fts WHERE notes_fts MATCH ? ORDER BY rank",
+    query
+  ) as Promise<Pick<Note, "id">[]>;
 };
 
-export const add = async (
-  db: LowdbAsync<Database>,
-  { content }: Pick<Note, "content">
-) => {
+interface DBNote extends Omit<Note, "history"> {
+  history?: string;
+}
+
+export const loadAll = async (db: Database) => {
+  const notes = (await db.all(
+    "SELECT * FROM notes WHERE deleted = 0 ORDER BY createdAt DESC"
+  )) as DBNote[];
+
+  return notes.map((note) => ({
+    ...note,
+    history: note.history ? JSON.parse(note.history) : null,
+  }));
+};
+
+export const add = async (db: Database, { content }: Pick<Note, "content">) => {
+  const {
+    lastID,
+  } = (await db.run("INSERT INTO notes (content, pdfsContent) values (?, ?)", [
+    content,
+    await getPDFsContent(content),
+  ])) as { lastID: number };
+
   const note = {
-    id: shortid.generate(),
+    id: lastID,
     content,
     createdAt: new Date(),
     updatedAt: new Date(),
     deleted: false,
   };
 
-  db.get("entries").push(note).write();
-  Index.add(await formatDocumentForIndex(note));
-
   return note;
 };
 
-export const remove = async (db: LowdbAsync<Database>, id: string) => {
-  const note = db.get("entries").find({ id }).value();
-
-  db.get("entries")
-    .find({ id: id })
-    .assign({ ...note, deleted: true, updatedAt: new Date() })
-    .write();
-
-  Index.remove(id);
+export const remove = async (db: Database, id: number) => {
+  await db.run("UPDATE notes SET deleted = 1, updatedAt = ? WHERE id = ?", [
+    new Date(),
+    id,
+  ]);
 };
 
-export const update = async (db: LowdbAsync<Database>, note: Note) => {
-  db.get("entries")
-    .find({ id: note.id })
-    .assign({ ...note, updatedAt: new Date() })
-    .write();
-  Index.update(await formatDocumentForIndex(note));
+export const update = async (db: Database, note: Note) => {
+  await db.run(
+    "UPDATE notes SET content = ?, pdfsContent = ?, history = ?, deleted = ?, archived = ?, updatedAt = ? WHERE id = ?",
+    [
+      note.content,
+      getPDFsContent(note.content),
+      JSON.stringify(note.history),
+      note.deleted,
+      note.archived,
+      new Date(),
+      note.id,
+    ]
+  );
+
   return;
 };
 
-export const updateOrInsert = async (db: LowdbAsync<Database>, note: Note) => {
-  if (!note) return;
-
-  const found = db.get("entries").find({ id: note.id }).value();
-
-  if (!found) {
-    db.get("entries").push(note).write();
-    Index.add(await formatDocumentForIndex(note));
-    return;
-  }
-
-  if (new Date(found.updatedAt) < new Date(note.updatedAt)) {
-    db.get("entries")
-      .find({ id: note.id })
-      .assign({ ...note })
-      .write();
-
-    Index.update(await formatDocumentForIndex(note));
-  }
-};
-
-export const hydrateIndex = async (db: LowdbAsync<Database>) => {
-  try {
-    await Index.loadIndex();
-  } catch (e) {
-    console.error(e);
-    loadAll(db).then((notes) =>
-      notes.map(async (note) => Index.add(await formatDocumentForIndex(note)))
-    );
-  }
-};
-
-async function formatDocumentForIndex(note: Note) {
-  let content = note.content;
+export async function getPDFsContent(content: string) {
+  let pdfsContent = "";
 
   if (content) {
     const pdfs = await pdfFromMarkdown(content);
-    const pdfsContent = await Promise.all(pdfs.map(textFromPDF));
-    content += " " + flatten(pdfsContent).join(" ");
+    const allContent = await Promise.all(pdfs.map(textFromPDF));
+    pdfsContent += " " + flatten(allContent).join(" ");
   }
 
-  return {
-    ...note,
-    content,
-    createdAt: format(new Date(note.createdAt), "cccc MMMM"),
-  };
+  return pdfsContent;
 }
 
 async function pdfFromMarkdown(markdown: string) {

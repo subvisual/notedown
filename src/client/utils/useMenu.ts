@@ -6,7 +6,7 @@ const { Menu } = remote;
 
 import { modeSet } from "../mode";
 import { MenuItemConstructorOptions } from "electron";
-import { notesSyncFolder, notesEdit } from "../notes";
+import { notesEdit } from "../notes";
 
 const isMac = process.platform === "darwin";
 
@@ -38,13 +38,6 @@ export const useMenu = () => {
             label: "Edit Note",
             accelerator: "CmdOrCtrl+E",
             click: () => dispatch(notesEdit()),
-          },
-          { type: "separator" },
-          {
-            label: "Sync Folder",
-            click: () => {
-              dispatch(notesSyncFolder());
-            },
           },
           { type: "separator" },
           { label: "Quit", role: "quit" },

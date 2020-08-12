@@ -16,7 +16,7 @@ The five principles behind the design of NoteDown are:
 
 ## Functionality
 
-Most note-taking applications work as a wiki: you can write titles for your notes, organize them by folder, assign tags, etc. NoteDown takes a different approach and it's more like a diary, or a scratchpad: you just write everything, anything, one note after the other in chronological order.
+Most note-taking applications work like a wiki: you can write titles for your notes, organize them by folder, assign tags, etc. NoteDown takes a different approach and it's more like a diary, or a scratchpad: you just write everything, anything, one note after the other in chronological order.
 
 NoteDown is only for the capture and retrieval of information. Put everything into it, and use the search when you need it.
 
@@ -53,7 +53,7 @@ NoteDown also extends Markdown to allow:
 
 NoteDown works like a diary, where you write one note after the other. Time is the only thing connecting notes. To find something, you can either scroll all the way down or use the search. You should use the search as it works in text, file names, links, it even works for text inside PDFs!
 
-Since you cannot use tags or links like in other note-taking applications, the way to relate information is with keywords. For instance, all my notes related to NoteDown start, or end, with the word `@notedown`. This makes it very easy for me to look it up. When I need to save a link to a page talking about Vim, I paste the link and then write a couple of related words such as `vim`, `editor`, or `workflow`.
+Since you cannot use tags or links like in other note-taking applications, the way to relate information is with keywords. For instance, all my notes related to NoteDown start, or end, with the word `notedown`. This makes it very easy for me to look it up. When I need to save a link to a page talking about Vim, I paste the link and then write a couple of related words such as `vim`, `editor`, or `workflow`. Search is full-text search, which means you can use `NOT`, `OR`, `AND`, `+` to refine the search. You can even use prefix, for instance, to find every word starting with _note_: `note*`.
 
 ### Notes List
 
@@ -61,7 +61,11 @@ The notes list allows you to perform operations on individual notes: open in the
 
 ### Backup
 
-Your notes and files are saved to your computer only, so you should take some precautions to backup your data. On the menu, there's an option called "Sync Folder". This is a two-way mechanism to sync notes to and from a folder. You can use it to back-up notes to Google Drive for instance. You can even use it to sync notes between two computers using NoteDown, but I advise caution on this one, as I haven't tested it thoroughly.
+Your notes and files are only saved to your computer, so you should take some precautions to backup your data. The most important are notedown/notedown.sqlite and notedown/files/ and you can find them in:
+
+- `%APPDATA%` on Windows
+- `$XDG_CONFIG_HOME` or `~/.config` on Linux
+- `~/Library/Application Support` on macOS
 
 ### Tips
 

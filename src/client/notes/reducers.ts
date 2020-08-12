@@ -24,7 +24,7 @@ export function notesReducer(
       if (action.payload) return { ...state, deleting: action.payload };
       else if (!state.deleting && !action.payload && state.selected)
         return { ...state, deleting: state.selected.id };
-      else if (!action.payload) return { ...state, deleting: null };
+      else return { ...state, deleting: null };
     }
 
     case notesSearch.type:

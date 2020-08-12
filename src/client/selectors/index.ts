@@ -27,7 +27,7 @@ export const getSearchResultNotes = createSelector(
   (searchQuery, notes, searchResult) =>
     searchQuery
       ? orderBy(
-          compact(searchResult.map(({ ref }) => find(notes, { id: ref }))),
+          compact(searchResult.map(({ id }) => find(notes, { id }))),
           (note: Note) => new Date(note.createdAt),
           "desc"
         )
