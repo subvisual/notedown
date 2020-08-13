@@ -29,13 +29,16 @@ export const loadAll = async (db: Database) => {
   }));
 };
 
-export const add = async (db: Database, { content }: Pick<Note, "content">) => {
+export const add = async (
+  db: Database,
+  { content, history }: Pick<Note, "content" | "history">
+) => {
   const {
     lastID,
-  } = (await db.run("INSERT INTO notes (content, pdfsContent) values (?, ?)", [
-    content,
-    await getPDFsContent(content),
-  ])) as { lastID: number };
+  } = (await db.run(
+    "INSERT INTO notes (content, pdfsContent, history) values (?, ?, ?)",
+    [content, await getPDFsContent(content), JSON.stringify(history)]
+  )) as { lastID: number };
 
   const note = {
     id: lastID,
