@@ -270,7 +270,7 @@ export const NotePreview = ({ selected, note, focus }: Props) => {
       <Root
         ref={ref}
         key={note.id}
-        onClick={() => dispatch(notesSelect(note))}
+        onClick={() => dispatch(notesSelect(note.id))}
         selected={selected}
       >
         <NoteContent selected={selected}>{note.content}</NoteContent>

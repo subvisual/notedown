@@ -10,7 +10,13 @@ export const getDeletingNote = (state: RootState) =>
     ? find(state.notes.notes, { id: state.notes.deleting })
     : null;
 
-export const getSelected = (state: RootState) => state.notes.selected;
+export const getSelectedId = (state: RootState) => state.notes.selectedId;
+
+export const getSelected = createSelector(
+  getAllNotes,
+  getSelectedId,
+  (notes, id) => find(notes, { id })
+);
 
 export const getEdit = (state: RootState) => state.notes.edit;
 

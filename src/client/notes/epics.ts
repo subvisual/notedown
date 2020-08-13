@@ -1,7 +1,6 @@
-import { interval, of, merge, empty, from } from "rxjs";
+import { interval, of, from } from "rxjs";
 import {
   mergeMap,
-  mergeMapTo,
   throttle,
   tap,
   ignoreElements,
@@ -28,12 +27,14 @@ import {
   notesSelectDebounced,
   notesEdit,
   notesEditTmp,
+  notesEditSuccess,
 } from "./actions";
 import * as Notes from "../../models/notes";
 import { RootState, Note } from "../../models/types";
 import { modeSet } from "mode";
+import { getSelected } from "selectors";
 
-export const notesRestoreTmpState = (
+export const notesRestoreTmpStateEpic = (
   action$: ActionsObservable<NotesActionTypes>
 ) =>
   action$.pipe(
@@ -51,7 +52,7 @@ export const notesRestoreTmpState = (
     mergeMap((note: unknown) => of(notesEdit(note as Note)))
   );
 
-export const notesSaveTmpState = (
+export const notesSaveTmpStateEpic = (
   action$: ActionsObservable<NotesActionTypes>
 ) =>
   action$.pipe(
@@ -62,7 +63,7 @@ export const notesSaveTmpState = (
     ignoreElements()
   );
 
-export const loadNotesEpic = (
+export const notesLoadEpic = (
   action$: ActionsObservable<NotesActionTypes>,
   state$: StateObservable<RootState>
 ) =>
@@ -158,24 +159,36 @@ export const notesSearchEpic = (
     mergeMap((results) => of(notesSearchResult(results)))
   );
 
-export const notesEditFocusEpic = (
-  action$: ActionsObservable<ReturnType<typeof notesEdit>>
+export const notesEditEpic = (
+  action$: ActionsObservable<ReturnType<typeof notesEdit>>,
+  state$: StateObservable<RootState>
 ) =>
   action$.pipe(
     ofType(notesEdit.type),
+    map(({ payload }) => (payload ? payload : getSelected(state$.value))),
+    filter((note) => !!note),
+    mergeMap((note) => of(notesEditSuccess(note)))
+  );
+
+export const notesEditFocusEpic = (
+  action$: ActionsObservable<ReturnType<typeof notesEditSuccess>>
+) =>
+  action$.pipe(
+    ofType(notesEditSuccess.type),
     debounceTime(20),
     mergeMap(() => of(modeSet("editor")))
   );
 
 export const notesEpics = [
-  loadNotesEpic,
+  notesLoadEpic,
   notesAddEpic,
   notesRemoveEpic,
   notesUpdateEpic,
   notesSearchEpic,
   notesSelectEpic,
   notesOnboardingEpic,
+  notesEditEpic,
   notesEditFocusEpic,
-  notesRestoreTmpState,
-  notesSaveTmpState,
+  notesRestoreTmpStateEpic,
+  notesSaveTmpStateEpic,
 ];

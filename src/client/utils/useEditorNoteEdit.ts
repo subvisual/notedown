@@ -12,10 +12,13 @@ export const useEditorNoteEdit = (
     if (noteEdit && noteEdit.content) {
       editor.setValue(noteEdit.content);
       if (noteEdit.history) editor.setHistory(noteEdit.history);
+      setImmediate(() => {
+        editor.execCommand("goDocEnd");
+      });
       setTimeout(() => {
         editor.refresh();
         editor.execCommand("goDocEnd");
-      }, 100);
+      }, 1000);
     } else {
       editor.setValue("");
       editor.setHistory({ done: [], undone: [] });

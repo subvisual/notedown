@@ -30,7 +30,7 @@ export interface NotesState {
   notes: Note[];
   searchQuery: string;
   searchResult: SearchResult[];
-  selected?: Note;
+  selectedId?: number;
 }
 
 export interface ThemeState {

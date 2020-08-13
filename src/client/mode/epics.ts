@@ -32,7 +32,7 @@ export const modeNotesKeyEpic = (
         const index = getSelectedNoteIndex(notes, selected);
         const newIndex = selected ? Math.min(index + 1, notes.length - 1) : 0;
 
-        return of(notesSelect(notes[newIndex]));
+        return of(notesSelect(notes[newIndex].id));
       } else if (key === "k" || key === "ArrowUp") {
         // MOVE UP
         const notes = getSearchResultNotes(state$.value);
@@ -40,7 +40,7 @@ export const modeNotesKeyEpic = (
         const index = getSelectedNoteIndex(notes, selected);
         const newIndex = selected ? Math.max(index - 1, 0) : 0;
 
-        return of(notesSelect(notes[newIndex]));
+        return of(notesSelect(notes[newIndex].id));
       } else if (key === "e") {
         // EDIT
         return of(notesEdit());
@@ -65,11 +65,11 @@ export const modeNotesKeyEpic = (
       } else if (key === "G") {
         // LAST
         const notes = getAllNotes(state$.value);
-        return of(notesSelect(notes[notes.length - 1]));
+        return of(notesSelect(notes[notes.length - 1].id));
       } else if (key === "g") {
         // FIRST
         const notes = getAllNotes(state$.value);
-        return of(notesSelect(notes[0]));
+        return of(notesSelect(notes[0].id));
       } else {
         return of();
       }

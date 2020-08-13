@@ -1,14 +1,15 @@
 import { Note, SearchResult } from "models/types";
 import createAction from "utils/createAction";
 
-export const notesSelect = createAction("NOTES_SELECT")<Note>();
+export const notesSelect = createAction("NOTES_SELECT")<number>();
 export const notesSelectDebounced = createAction("NOTES_SELECT_DEBOUNCED")<
-  Note
+  number
 >();
 export const notesDelete = createAction("NOTES_DELETE")<number>();
 export const notesRemove = createAction("NOTES_REMOVE")<number>();
 export const notesUpdate = createAction("NOTES_UPDATE")<Note>();
-export const notesEdit = createAction("NOTES_EDIT")<Note>();
+export const notesEdit = createAction("NOTES_EDIT")<Note | null>();
+export const notesEditSuccess = createAction("NOTES_EDIT_SUCCESS")<Note>();
 export const notesEditTmp = createAction("NOTES_EDIT_TMP")<Note>();
 export const notesAdd = createAction("NOTES_ADD")<
   Pick<Note, "content" | "history">
@@ -29,6 +30,7 @@ export type NotesActionTypes =
   | ReturnType<typeof notesSelect>
   | ReturnType<typeof notesUpdate>
   | ReturnType<typeof notesEdit>
+  | ReturnType<typeof notesEditSuccess>
   | ReturnType<typeof notesEditTmp>
   | ReturnType<typeof notesDelete>
   | ReturnType<typeof notesRemove>

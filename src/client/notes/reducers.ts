@@ -1,4 +1,4 @@
-import { orderBy } from "lodash";
+import { orderBy, find } from "lodash";
 
 import { Note, NotesState } from "models/types";
 
@@ -13,6 +13,7 @@ import {
   notesSearch,
   notesSearchResult,
   notesDelete,
+  notesEditSuccess,
 } from "./actions";
 
 export function notesReducer(
@@ -22,8 +23,8 @@ export function notesReducer(
   switch (action.type) {
     case notesDelete.type: {
       if (action.payload) return { ...state, deleting: action.payload };
-      else if (!state.deleting && !action.payload && state.selected)
-        return { ...state, deleting: state.selected.id };
+      else if (!state.deleting && !action.payload && state.selectedId)
+        return { ...state, deleting: state.selectedId };
       else return { ...state, deleting: null };
     }
 
@@ -37,23 +38,23 @@ export function notesReducer(
       return {
         ...state,
         notes: [action.payload, ...state.notes],
-        selected: action.payload,
-        focusId: action.payload.id,
+        selectedId: action.payload.id,
       };
 
-    case notesEdit.type: {
-      if (state.selected || action.payload)
-        return { ...state, edit: state.selected || action.payload };
-      else return state;
-    }
+    case notesEditSuccess.type:
+      return {
+        ...state,
+        edit: action.payload,
+      };
 
     case notesSelectDebounced.type:
-      return { ...state, selected: action.payload, focusId: action.payload.id };
+      return { ...state, selectedId: action.payload, focusId: action.payload };
 
     case notesUpdate.type:
       return {
         ...state,
         edit: null,
+        selectedId: action.payload.id,
         notes: state.notes.map((note) => {
           if (note.id === action.payload.id)
             return { ...note, ...action.payload };
@@ -61,7 +62,7 @@ export function notesReducer(
         }),
       };
 
-    case notesLoadSuccess.type:
+    case notesLoadSuccess.type: {
       return {
         ...state,
         notes: orderBy(
@@ -70,6 +71,7 @@ export function notesReducer(
           "desc"
         ),
       };
+    }
 
     case notesRemove.type:
       return {
