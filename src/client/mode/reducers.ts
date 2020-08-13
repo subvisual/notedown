@@ -7,6 +7,9 @@ export function modeReducer(state: ModeState, action: ModeActionTypes) {
       if (state.name === "search" && action.payload === "search")
         return { ...state, name: "notes" };
 
+      if (state.name === "editorFocus" && action.payload === "editorFocus")
+        return { ...state, name: "editor" };
+
       return { ...state, name: action.payload };
     }
 

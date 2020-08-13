@@ -47,7 +47,7 @@ export const modeNotesKeyEpic = (
       } else if (key === "d") {
         // DELETE
         return of(notesDelete(null));
-      } else if (key === "n") {
+      } else if (key === "t") {
         // FOCUS
         return of(modeSet("editorFocus"));
       } else if (key === "h") {

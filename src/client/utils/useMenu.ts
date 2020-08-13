@@ -75,8 +75,13 @@ export const useMenu = () => {
       {
         label: "View",
         submenu: [
-          { label: "Reload", role: "reload" },
+          {
+            label: "Focus mode",
+            accelerator: "CmdOrCtrl+T",
+            click: () => dispatch(modeSet("editorFocus")),
+          },
           { type: "separator" },
+          { label: "Reload", role: "reload" },
           { label: "Toggle Developer Tools", role: "toggleDevTools" },
         ],
       },

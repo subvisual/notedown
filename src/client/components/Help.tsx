@@ -101,7 +101,7 @@ export const Help = () => {
                 <em>c</em> - Change the theme.
               </li>
               <li>
-                <em>n</em> - Focus mode.
+                <em>t/Cmd+T</em> - Toggle focus mode.
               </li>
             </ul>
             <p>
