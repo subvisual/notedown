@@ -32,9 +32,9 @@ protocol.registerSchemesAsPrivileged([
       secure: true,
       allowServiceWorkers: true,
       supportFetchAPI: true,
-      corsEnabled: true,
-    },
-  },
+      corsEnabled: true
+    }
+  }
 ]);
 
 async function createWindow() {
@@ -70,8 +70,8 @@ async function createWindow() {
     width: 1500,
     autoHideMenuBar: true,
     webPreferences: {
-      nodeIntegration: true,
-    },
+      nodeIntegration: true
+    }
   });
 
   mainWindow.menuBarVisible = false;
@@ -128,7 +128,7 @@ async function createWindow() {
 app.allowRendererProcessReuse = false;
 app.setAsDefaultProtocolClient("notedown");
 
-app.on("open-url", async function (event, data) {
+app.on("open-url", async function(event, data) {
   if (mainWindow === null) {
     await createWindow();
   }

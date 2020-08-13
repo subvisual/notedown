@@ -9,8 +9,8 @@ const isDev = process.env.NODE_ENV === "development";
 const clientPlugins = [
   new HtmlWebpackPlugin({
     title: "NoteDown",
-    template: "src/client/index.html",
-  }),
+    template: "src/client/index.html"
+  })
 ];
 
 if (isDev) clientPlugins.push(new ErrorOverlayPlugin());
@@ -18,11 +18,11 @@ if (isDev) clientPlugins.push(new ErrorOverlayPlugin());
 function createAliasesToFolder(originPath) {
   return fs
     .readdirSync(originPath, { withFileTypes: true })
-    .filter((found) => found.isDirectory())
+    .filter(found => found.isDirectory())
     .reduce(
       (memo, folder) => ({
         ...memo,
-        [folder.name]: path.join(originPath, folder.name),
+        [folder.name]: path.join(originPath, folder.name)
       }),
       {}
     );
@@ -44,44 +44,44 @@ module.exports = [
       rules: [
         {
           test: /\.sql$/,
-          loader: "raw-loader",
+          loader: "raw-loader"
         },
         {
           test: /\.tsx?$/,
           loader: "ts-loader",
           exclude: /node_modules/,
           options: {
-            onlyCompileBundledFiles: true,
-          },
-        },
-      ],
+            onlyCompileBundledFiles: true
+          }
+        }
+      ]
     },
     resolve: {
-      extensions: [".tsx", ".ts", ".js"],
+      extensions: [".tsx", ".ts", ".js"]
     },
     output: {
       filename: "index.js",
-      path: path.resolve(__dirname, "build/server/"),
+      path: path.resolve(__dirname, "build/server/")
     },
     externals: {
-      sqlite3: "commonjs sqlite3",
+      sqlite3: "commonjs sqlite3"
     },
     optimization: isDev
       ? {}
       : {
           minimize: true,
-          minimizer: [new TerserPlugin()],
-        },
+          minimizer: [new TerserPlugin()]
+        }
   },
   {
     name: "client",
     entry: "./src/client/index.tsx",
     devtool: isDev ? "inline-source-map" : "source-map",
     mode: process.env.NODE_ENV || "development",
-    target: "electron-renderer",
+    target: "web",
     devServer: {
       contentBase: path.join(__dirname, "build/client"),
-      stats: "errors-only",
+      stats: "errors-only"
     },
     module: {
       rules: [
@@ -90,47 +90,49 @@ module.exports = [
           loader: "ts-loader",
           exclude: /node_modules/,
           options: {
-            onlyCompileBundledFiles: true,
-          },
+            onlyCompileBundledFiles: true
+          }
         },
         {
           test: /\.css$/i,
-          use: ["style-loader", "css-loader"],
+          use: ["style-loader", "css-loader"]
         },
         {
           test: /\.(png|jpg|gif)$/,
-          use: ["file-loader"],
+          use: ["file-loader"]
         },
         {
           test: /\.(woff|woff2|eot|ttf|otf)$/,
-          use: ["file-loader"],
+          use: ["file-loader"]
         },
         {
           test: /\.sql$/,
-          use: "raw-loader",
-        },
-      ],
+          use: "raw-loader"
+        }
+      ]
     },
     resolve: {
       extensions: [".tsx", ".ts", ".js"],
       alias: {
         models: path.resolve(__dirname, "src/models"),
-        ...createAliasesToFolder(path.resolve(__dirname, "src/client")),
-      },
+        ...createAliasesToFolder(path.resolve(__dirname, "src/client"))
+      }
     },
     output: {
       filename: "index.js",
-      path: path.resolve(__dirname, "build/client/"),
+      path: path.resolve(__dirname, "build/client/")
     },
     externals: {
       sqlite3: "commonjs sqlite3",
+      electron: "commonjs electron",
+      fs: "commonjs fs"
     },
     plugins: clientPlugins,
     optimization: isDev
       ? {}
       : {
           minimize: true,
-          minimizer: [new TerserPlugin()],
-        },
-  },
+          minimizer: [new TerserPlugin()]
+        }
+  }
 ];

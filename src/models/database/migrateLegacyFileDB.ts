@@ -36,7 +36,10 @@ if (isRenderer) {
 export const databaseFile = `${localApp.getPath("userData")}/.timeline.json`;
 
 export const fileLoadAll = async (db: FileDatabase) => {
-  return db.get("entries").reject({ deleted: true }).value();
+  return db
+    .get("entries")
+    .reject({ deleted: true })
+    .value();
 };
 
 export const getTheme = async (db: FileDatabase) => {
@@ -53,8 +56,8 @@ export const run = async (db: Database) => {
       theme: {
         background1: "#2a2438",
         background2: "#352f44",
-        accent1: "#411e8f",
-      },
+        accent1: "#411e8f"
+      }
     })
     .write();
 
@@ -67,7 +70,7 @@ export const run = async (db: Database) => {
 
       await db.run("INSERT INTO settings (id, value) values (?, json(?))", [
         "theme",
-        JSON.stringify(theme),
+        JSON.stringify(theme)
       ]);
 
       await Promise.all(
@@ -78,7 +81,7 @@ export const run = async (db: Database) => {
             createdAt,
             history,
             updatedAt,
-            archived,
+            archived
           }) => {
             return db.run(
               "INSERT INTO notes (content, pdfsContent, deleted, archived, history, createdAt, updatedAt) values (?, ?, ?, ?, ?, ?, ?)",
@@ -89,7 +92,7 @@ export const run = async (db: Database) => {
                 archived || false,
                 history ? JSON.stringify(history) : null,
                 createdAt,
-                updatedAt,
+                updatedAt
               ]
             );
           }

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useDispatch } from "react-redux";
 
-const { remote } = require("electron");
+import { remote } from "electron";
 const { Menu } = remote;
 
 import { modeSet } from "../mode";
@@ -20,8 +20,8 @@ export const useMenu = () => {
         ? [
             {
               label: "NoteDown",
-              submenu: [{ role: "quit" }],
-            },
+              submenu: [{ role: "quit" }]
+            }
           ]
         : []),
       {
@@ -32,20 +32,20 @@ export const useMenu = () => {
             accelerator: "CmdOrCtrl+N",
             click: () => {
               dispatch(modeSet("editor"));
-            },
+            }
           },
           {
             label: "Edit Note",
             accelerator: "CmdOrCtrl+E",
-            click: () => dispatch(notesEdit()),
+            click: () => dispatch(notesEdit())
           },
           { type: "separator" },
-          { label: "Quit", role: "quit" },
-        ],
+          { label: "Quit", role: "quit" }
+        ]
       },
       {
         label: "File",
-        submenu: [isMac ? { role: "close" } : { role: "quit" }],
+        submenu: [isMac ? { role: "close" } : { role: "quit" }]
       },
       {
         label: "Edit",
@@ -61,16 +61,16 @@ export const useMenu = () => {
           {
             label: "Search Notes",
             accelerator: "CmdOrCtrl+F",
-            click: () => dispatch(modeSet("search")),
+            click: () => dispatch(modeSet("search"))
           },
           { type: "separator" },
           {
             label: "Theme",
             click: async () => {
               dispatch(modeSet("colorPicker"));
-            },
-          },
-        ],
+            }
+          }
+        ]
       },
       {
         label: "View",
@@ -78,12 +78,12 @@ export const useMenu = () => {
           {
             label: "Focus mode",
             accelerator: "CmdOrCtrl+T",
-            click: () => dispatch(modeSet("editorFocus")),
+            click: () => dispatch(modeSet("editorFocus"))
           },
           { type: "separator" },
           { label: "Reload", role: "reload" },
-          { label: "Toggle Developer Tools", role: "toggleDevTools" },
-        ],
+          { label: "Toggle Developer Tools", role: "toggleDevTools" }
+        ]
       },
       {
         label: "Help",
@@ -92,16 +92,16 @@ export const useMenu = () => {
             label: "Tips",
             click: async () => {
               dispatch(modeSet("tips"));
-            },
+            }
           },
           {
             label: "Shortcuts",
             click: async () => {
               dispatch(modeSet("shortcuts"));
-            },
-          },
-        ],
-      },
+            }
+          }
+        ]
+      }
     ];
 
     const appMenu = Menu.buildFromTemplate(menu);

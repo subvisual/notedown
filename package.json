@@ -4,14 +4,15 @@
   "main": "./build/server/index.js",
   "license": "MIT",
   "scripts": {
-    "start": "concurrently --raw  \"yarn webpack-start-client\" \"yarn webpack-start-server\" \"yarn server-start\"",
+    "start": "concurrently --raw  \"yarn webpack-start-client\" \"yarn tauri dev\"",
     "server-start": "wait-on -d 1500 -i 500 http://localhost:8080 && nodemon --watch ./build/server/ --ext js --exec \"NODE_ENV=development electron build/server/index.js\"",
     "webpack-start-client": "NODE_ENV=development webpack-dev-server --config-name client",
     "webpack-start-server": "NODE_ENV=development webpack --watch --config-name server",
     "build": "NODE_ENV=production webpack",
     "pack": "yarn build && electron-builder --dir",
     "dist": "yarn build && electron-builder -ml",
-    "release": "electron-builder"
+    "release": "electron-builder",
+    "tauri": "wait-on -d 1500 -i 500 http://localhost:8080 && tauri"
   },
   "build": {
     "productName": "NoteDown",
@@ -45,7 +46,10 @@
     }
   },
   "dependencies": {
-    "sqlite3": "^5.0.0"
+    "fs": "^0.0.1-security",
+    "graceful-fs": "^4.2.4",
+    "sqlite3": "^5.0.0",
+    "tauri": "^0.11.1"
   },
   "devDependencies": {
     "@types/codemirror": "^0.0.93",
