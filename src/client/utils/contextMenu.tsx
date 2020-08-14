@@ -1,7 +1,7 @@
-import { remote, shell } from "electron";
-import { notesFileToFullPath } from "models/files";
+// import { remote, shell } from "electron";
+// import { notesFileToFullPath } from "models/files";
 
-const { Menu, MenuItem } = remote;
+// const { Menu, MenuItem } = remote;
 
 const getElementSource = (el: EventTarget) => {
   if (el instanceof HTMLImageElement) {
@@ -15,40 +15,40 @@ const getElementSource = (el: EventTarget) => {
   return null;
 };
 
-const createMenuForElement = (el: EventTarget) => {
-  const src = getElementSource(el);
-
-  const menu = new Menu();
-
-  if (src && src.startsWith("notesfile://")) {
-    menu.append(
-      new MenuItem({
-        label: "Open",
-        click() {
-          shell.openPath(notesFileToFullPath(src));
-        },
-      })
-    );
-    menu.append(
-      new MenuItem({
-        label: "Reveal in file explorer",
-        click() {
-          shell.showItemInFolder(notesFileToFullPath(src));
-        },
-      })
-    );
-  }
-
-  return menu;
-};
+// const createMenuForElement = (el: EventTarget) => {
+//   const src = getElementSource(el);
+//
+//   const menu = new Menu();
+//
+//   if (src && src.startsWith("notesfile://")) {
+//     menu.append(
+//       new MenuItem({
+//         label: "Open",
+//         click() {
+//           shell.openPath(notesFileToFullPath(src));
+//         },
+//       })
+//     );
+//     menu.append(
+//       new MenuItem({
+//         label: "Reveal in file explorer",
+//         click() {
+//           shell.showItemInFolder(notesFileToFullPath(src));
+//         },
+//       })
+//     );
+//   }
+//
+//   return menu;
+// };
 
 window.addEventListener(
   "contextmenu",
-  (e) => {
+  e => {
     e.preventDefault();
 
-    const menu = createMenuForElement(e.target);
-    menu.popup({ window: remote.getCurrentWindow() });
+    // const menu = createMenuForElement(e.target);
+    // menu.popup({ window: remote.getCurrentWindow() });
   },
   false
 );

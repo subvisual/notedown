@@ -1,28 +1,28 @@
 import * as path from "path";
-import * as fs from "fs";
+// import * as fs from "fs";
 import * as shortid from "shortid";
 import * as querystring from "querystring";
-import { app } from "electron";
+// import { app } from "electron";
 import * as axios from "axios";
 
-let localApp = app;
+// let localApp = app;
 let localAxios = axios as any;
 
-const isRenderer = process && process.type === "renderer";
+// const isRenderer = process && process.type === "renderer";
 
-if (isRenderer) {
-  const { remote } = window.require("electron");
-  localApp = remote.app;
-  localAxios = remote.getGlobal("axios");
-}
+// if (isRenderer) {
+//   const { remote } = window.require("electron");
+//   // localApp = remote.app;
+//   localAxios = remote.getGlobal("axios");
+// }
 
-const fsPromises = fs.promises;
+// const fsPromises = fs.promises;
 
-export const folder = path.join(localApp.getPath("userData"), "files");
+// export const folder = path.join(localApp.getPath("userData"), "files");
 
-if (!fs.existsSync(folder)) {
-  fs.mkdirSync(folder);
-}
+// if (!fs.existsSync(folder)) {
+//   fs.mkdirSync(folder);
+// }
 
 function getExtension(contentType: string) {
   switch (contentType) {
@@ -44,7 +44,7 @@ export const notesFileToFullPath = (uri: string) => {
 
   url = querystring.unescape(url);
 
-  return path.join(folder, url);
+  // return path.join(folder, url);
 };
 
 export const addRemoteFile = async (url: string) => {
@@ -55,44 +55,48 @@ export const addRemoteFile = async (url: string) => {
   const ext = getExtension(response.headers["content-type"]);
   const fileName = `${id}.${ext}`.toLowerCase();
 
-  const filePath = path.join(folder, fileName);
-  await fsPromises.writeFile(filePath, response.data);
+  // const filePath = path.join(folder, fileName);
+  // await fsPromises.writeFile(filePath, response.data);
 
-  return { id, name: fileName, filePath, fileName };
+  return { id, name: fileName, filePath: "TODO", fileName };
 };
 
 export const addLocalFile = async (file: File) => {
   const id = shortid();
 
-  const data = await fsPromises.readFile(file.path);
+  // const data = await fsPromises.readFile(file.path);
 
   const fileName = `${id}-${file.name}`
     .match(/[a-zA-Z0-9\.\-_]+/g)
     .join("-")
     .toLowerCase();
-  const filePath = path.join(folder, fileName);
-  await fsPromises.writeFile(filePath, data);
+  // const filePath = path.join(folder, fileName);
+  // await fsPromises.writeFile(filePath, data);
 
-  return { id, name: file.name, filePath, fileName: fileName };
+  return { id, name: file.name, filePath: "TODO", fileName: fileName };
 };
 
 export const addBuffer = async (buffer: Buffer) => {
   const id = shortid();
   const fileName = id.toLowerCase();
-  const filePath = path.join(folder, fileName);
-  await fsPromises.writeFile(filePath, buffer);
+  // const filePath = path.join(folder, fileName);
+  // await fsPromises.writeFile(filePath, buffer);
 
-  return { id, name: fileName, filePath, fileName: fileName };
+  return { id, name: fileName, filePath: "TODO", fileName: fileName };
 };
 
 export const get = async (fileName: string) => {
-  return fsPromises.readFile(path.join(folder, fileName));
+  // return fsPromises.readFile(path.join(folder, fileName));
+  console.log(fileName);
+  return Promise.resolve();
 };
 
 export const remove = async (fileName: string) => {
-  try {
-    await fsPromises.unlink(path.join(folder, fileName));
-  } catch (e) {
-    console.error(e);
-  }
+  console.log(fileName);
+  return Promise.resolve();
+  // try {
+  //   await fsPromises.unlink(path.join(folder, fileName));
+  // } catch (e) {
+  //   console.error(e);
+  // }
 };

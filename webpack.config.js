@@ -123,9 +123,7 @@ module.exports = [
       path: path.resolve(__dirname, "build/client/")
     },
     externals: {
-      sqlite3: "commonjs sqlite3",
-      electron: "commonjs electron",
-      fs: "commonjs fs"
+      sqlite3: "commonjs sqlite3"
     },
     plugins: clientPlugins,
     optimization: isDev

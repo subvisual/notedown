@@ -2,7 +2,7 @@ import * as React from "react";
 import * as _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { CodeMirrorEditor } from "./CodeMirrorEditor";
-const { remote } = window.require("electron");
+// const { remote } = window.require("electron");
 
 import "codemirror/mode/gfm/gfm";
 import "codemirror/lib/codemirror.css";
@@ -68,14 +68,14 @@ export function Editor() {
           notesUpdate({
             ...noteEdit,
             content: codeMirror.getValue(),
-            history: editor.getHistory(),
+            history: editor.getHistory()
           })
         );
       } else {
         dispatch(
           notesAdd({
             content: codeMirror.getValue(),
-            history: editor.getHistory(),
+            history: editor.getHistory()
           })
         );
       }
@@ -100,7 +100,7 @@ export function Editor() {
       },
       "Cmd-Enter": (codeMirror: CodeMirror.Editor) => {
         save(codeMirror);
-      },
+      }
     };
   }, [mode, editor, noteEdit, dispatch]);
 
@@ -109,11 +109,12 @@ export function Editor() {
   }, [mode]);
 
   const onBlur = React.useCallback(() => {
-    if (
-      (mode === "editor" || writingFocusMode) &&
-      !!remote.webContents.getFocusedWebContents()
-    )
-      dispatch(modeSet("notes"));
+    console.log("Editor on blur");
+    // if (
+    //   (mode === "editor" || writingFocusMode) &&
+    //   !!remote.webContents.getFocusedWebContents()
+    // )
+    //   dispatch(modeSet("notes"));
   }, [mode]);
 
   return (

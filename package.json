@@ -46,8 +46,6 @@
     }
   },
   "dependencies": {
-    "fs": "^0.0.1-security",
-    "graceful-fs": "^4.2.4",
     "sqlite3": "^5.0.0",
     "tauri": "^0.11.1"
   },

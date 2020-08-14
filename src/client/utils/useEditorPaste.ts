@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as electron from "electron";
+// import * as electron from "electron";
 import * as Files from "../../models/files";
 
 export const useEditorPaste = (
@@ -10,12 +10,14 @@ export const useEditorPaste = (
     if (!ref.current || !editor) return;
 
     const onPaste = async (_event: Event) => {
-      const image = electron.clipboard.readImage();
-      if (image.isEmpty()) return;
-      const savedFile = await Files.addBuffer(image.toJPEG(90));
-      const doc = editor.getDoc();
-      var cursor = doc.getCursor();
-      doc.replaceRange(`![](notesfile://${savedFile.fileName})`, cursor);
+      console.log("onPaste");
+      // const image = electron.clipboard.readImage();
+      return;
+      // if (image.isEmpty()) return;
+      // const savedFile = await Files.addBuffer(image.toJPEG(90));
+      // const doc = editor.getDoc();
+      // var cursor = doc.getCursor();
+      // doc.replaceRange(`![](notesfile://${savedFile.fileName})`, cursor);
     };
 
     ref.current.addEventListener("paste", onPaste);

@@ -1,11 +1,11 @@
 import * as React from "react";
 import { useDispatch } from "react-redux";
 
-import { remote } from "electron";
-const { Menu } = remote;
+// import { remote } from "electron";
+// const { Menu } = remote;
 
 import { modeSet } from "../mode";
-import { MenuItemConstructorOptions } from "electron";
+// import { MenuItemConstructorOptions } from "electron";
 import { notesEdit } from "../notes";
 
 const isMac = process.platform === "darwin";
@@ -104,7 +104,7 @@ export const useMenu = () => {
       }
     ];
 
-    const appMenu = Menu.buildFromTemplate(menu);
-    Menu.setApplicationMenu(appMenu);
+    // const appMenu = Menu.buildFromTemplate(menu);
+    // Menu.setApplicationMenu(appMenu);
   }, [dispatch]);
 };

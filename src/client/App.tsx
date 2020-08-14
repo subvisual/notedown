@@ -1,4 +1,3 @@
-import {} from "electron";
 import * as React from "react";
 import { createGlobalStyle } from "styled-components";
 import * as Modal from "react-modal";
