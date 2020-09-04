@@ -37,5 +37,11 @@ const converter = new showdown.Converter({
 });
 
 converter.setOption("tasklists", true);
+converter.setOption("omitExtraWLInCodeBlocks", true);
+converter.setOption("noHeaderId", true);
+converter.setOption("parseImgDimensions", true);
+converter.setOption("disableForced4SpacesIndentedSublists", true);
+converter.setOption("simpleLineBreaks", true);
+converter.setOption("requireSpaceBeforeHeadingText", true);
 
 export const convertMdToHTML = (md: string) => converter.makeHtml(md);
