@@ -128,25 +128,31 @@ async function createWindow() {
 app.allowRendererProcessReuse = false;
 app.setAsDefaultProtocolClient("notedown");
 
-app.on("open-url", async function (event, data) {
-  if (mainWindow === null) {
-    await createWindow();
-  }
+const gotTheLock = app.requestSingleInstanceLock();
 
-  event.preventDefault();
-  mainWindow.webContents.send("open-url", data);
-});
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on("open-url", async function (event, data) {
+    if (mainWindow === null) {
+      await createWindow();
+    }
 
-app.on("ready", createWindow);
+    event.preventDefault();
+    mainWindow.webContents.send("open-url", data);
+  });
 
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
-});
+  app.on("ready", createWindow);
 
-app.on("activate", () => {
-  if (mainWindow === null) {
-    createWindow();
-  }
-});
+  app.on("window-all-closed", () => {
+    if (process.platform !== "darwin") {
+      app.quit();
+    }
+  });
+
+  app.on("activate", () => {
+    if (mainWindow === null) {
+      createWindow();
+    }
+  });
+}
