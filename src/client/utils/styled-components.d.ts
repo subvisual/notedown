@@ -1,4 +1,4 @@
-import { ThemeColors } from "../theme";
+import { ThemeColors } from "../settings";
 
 declare module "styled-components" {
   export interface DefaultTheme extends ThemeColors {}

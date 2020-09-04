@@ -2,17 +2,17 @@ import { createStore, combineReducers, compose, applyMiddleware } from "redux";
 import { combineEpics, createEpicMiddleware } from "redux-observable";
 
 import { notesReducer } from "../notes/reducers";
-import { themeReducer } from "../theme/reducers";
+import { settingsReducer } from "../settings/reducers";
 import { modeReducer } from "../mode/reducers";
 import { databaseReducer } from "../database/reducers";
 
 import { notesEpics } from "../notes/epics";
-import { themeEpics } from "../theme/epics";
+import { settingsEpics } from "../settings/epics";
 import { modeEpics } from "../mode/epics";
 
 export const rootEpic = combineEpics.apply(this, [
   ...notesEpics,
-  ...themeEpics,
+  ...settingsEpics,
   ...modeEpics,
 ]);
 
@@ -24,7 +24,7 @@ export default function configureStore() {
   const store = createStore(
     combineReducers({
       notes: notesReducer,
-      theme: themeReducer,
+      settings: settingsReducer,
       mode: modeReducer,
       db: databaseReducer,
     }),

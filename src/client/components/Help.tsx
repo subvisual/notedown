@@ -103,6 +103,9 @@ export const Help = () => {
               <li>
                 <em>t/Cmd+T</em> - Toggle focus mode.
               </li>
+              <li>
+                <em>Cmd+,</em> - Preferences
+              </li>
             </ul>
             <p>
               Some shortcuts are only available when your focus is on the notes

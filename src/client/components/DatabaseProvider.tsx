@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { databaseLoad } from "database";
 import { createDatabase } from "models/database";
 import { getDb } from "../selectors";
-import { themeLoad } from "../theme";
+import { themeLoad, backupFolder } from "../settings";
 
 export const DatabaseProvider = ({ children }: { children: any }) => {
   const dispatch = useDispatch();
@@ -24,6 +24,7 @@ export const DatabaseProvider = ({ children }: { children: any }) => {
     if (!dispatch || !db) return;
 
     dispatch(themeLoad());
+    dispatch(backupFolder());
   }, [db, dispatch]);
 
   if (!db) return null;

@@ -65,7 +65,7 @@ export const run = async (db: Database) => {
       await db.run("BEGIN");
       const theme = await getTheme(fileDB);
 
-      await db.run("INSERT INTO settings (id, value) values (?, json(?))", [
+      await db.run("REPLACE INTO settings(id, value) values(?, json(?))", [
         "theme",
         JSON.stringify(theme),
       ]);

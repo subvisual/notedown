@@ -31,8 +31,9 @@ export interface NotesState {
   selectedId?: number;
 }
 
-export interface ThemeState {
+export interface SettingsState {
   colors: ThemeColors;
+  backupFolder?: string;
 }
 
 export interface DatabaseState {
@@ -41,6 +42,7 @@ export interface DatabaseState {
 
 export interface ModeState {
   name:
+    | "settings"
     | "tips"
     | "shortcuts"
     | "colorPicker"
@@ -52,7 +54,7 @@ export interface ModeState {
 
 export interface RootState {
   notes: NotesState;
-  theme: ThemeState;
+  settings: SettingsState;
   mode: ModeState;
   db: DatabaseState;
 }

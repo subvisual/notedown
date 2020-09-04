@@ -40,6 +40,14 @@ export const useMenu = () => {
             click: () => dispatch(notesEdit()),
           },
           { type: "separator" },
+          {
+            label: "Preferences",
+            accelerator: "CmdOrCtrl+,",
+            click: () => {
+              dispatch(modeSet("settings"));
+            },
+          },
+          { type: "separator" },
           { label: "Quit", role: "quit" },
         ],
       },

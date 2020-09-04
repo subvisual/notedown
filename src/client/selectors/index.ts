@@ -40,7 +40,7 @@ export const getSearchResultNotes = createSelector(
       : notes.filter((note) => !note.archived)
 );
 
-export const getTheme = (state: RootState) => state.theme;
+export const getTheme = (state: RootState) => state.settings;
 
 export const getMode = (state: RootState) => state.mode.name;
 
@@ -48,3 +48,6 @@ export const getWritingFocusMode = (state: RootState) =>
   state.mode.name === "editorFocus";
 
 export const getDb = (state: RootState) => state.db.db;
+
+export const getBackupFolder = (state: RootState) =>
+  state.settings.backupFolder;

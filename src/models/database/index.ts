@@ -14,10 +14,10 @@ if (isRenderer) {
   localApp = remote.app;
 }
 
+export const file = `${localApp.getPath("userData")}/notedown.sqlite`;
+
 export const createDatabase = async () => {
-  const sqlite = new SQLite3.Database(
-    `${localApp.getPath("userData")}/notedown.sqlite`
-  );
+  const sqlite = new SQLite3.Database(file);
 
   const db = new Database(sqlite);
 

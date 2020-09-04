@@ -7,7 +7,7 @@ import { findKey, map, pick, keys } from "lodash";
 
 import { ThemeColors } from "../../models/types";
 import { getTheme, getMode } from "../selectors";
-import { themeColors } from "../theme";
+import { themeColors } from "../settings";
 import { textColorForBackground } from "../utils/color";
 import { modeClose } from "../mode";
 import { ThemeItem } from "./ThemeItem";

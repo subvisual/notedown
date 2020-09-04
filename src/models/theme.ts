@@ -15,7 +15,7 @@ export const get = async (db: Database) => {
 };
 
 export const set = async (db: Database, colors: ThemeColors) => {
-  return db.run("UPDATE settings SET value = ? WHERE id = 'settings'", [
+  return db.run("REPLACE INTO settings(value, id) VALUES(?, 'theme')", [
     JSON.stringify(colors),
   ]);
 };

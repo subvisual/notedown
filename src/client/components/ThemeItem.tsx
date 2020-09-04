@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { ThemeColors } from "../theme";
+import { ThemeColors } from "../settings";
 import { visuallyHidden } from "../utils/visuallyHidden";
 import { textColorForBackground } from "../utils/color";
 
