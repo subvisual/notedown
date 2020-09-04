@@ -19,7 +19,7 @@ export const matchMdImage = (text: string) => {
 
   if (!match) return null;
 
-  return { src: match[1] };
+  return { src: match[1].split(" ")[0] };
 };
 
 interface MatchMdListItemResponse {
