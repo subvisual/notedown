@@ -1,12 +1,13 @@
 import * as React from "react";
 import { useDispatch } from "react-redux";
 
-const { remote } = require("electron");
+const { remote, clipboard } = require("electron");
 const { Menu } = remote;
 
 import { modeSet } from "../mode";
 import { MenuItemConstructorOptions } from "electron";
 import { notesEdit } from "../notes";
+import { pasteWithoutFormatting } from "../components/CodeMirrorEditor";
 
 const isMac = process.platform === "darwin";
 
@@ -63,6 +64,11 @@ export const useMenu = () => {
           { role: "cut" },
           { role: "copy" },
           { role: "paste" },
+          {
+            label: "Paste Without Formatting",
+            accelerator: "CmdOrCtrl+Shift+V",
+            click: () => pasteWithoutFormatting.next(clipboard.readText()),
+          },
           { role: "delete" },
           { role: "selectAll" },
           { type: "separator" },

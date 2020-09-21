@@ -110,9 +110,14 @@ export default styled.div<{ center: boolean }>`
     color: currentColor;
   }
 
-  .cm-s-notes span.cm-string {
+  .cm-s-notes span.cm-string:not(.cm-link) {
     color: currentColor;
     font-weight: bold;
+  }
+
+  .cm-s-notes .cm-link.cm-url.cm-string {
+    font-style: italic;
+    color: ${({ theme }) => smallContrast(theme.background2)};
   }
 
   .cm-s-notes span.cm-variable {

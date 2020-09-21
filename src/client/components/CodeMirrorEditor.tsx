@@ -2,6 +2,7 @@ import * as React from "react";
 import * as _ from "lodash";
 import styled from "styled-components";
 import * as CodeMirror from "codemirror";
+import { Subject } from "rxjs";
 
 import "codemirror/lib/codemirror.css";
 import "codemirror/addon/display/placeholder";
@@ -21,6 +22,8 @@ import {
   matchMdImage,
   matchMdListItem,
 } from "utils/regex";
+
+export const pasteWithoutFormatting = new Subject<string>();
 
 const Input = styled.textarea`
   width: 100%;
@@ -66,6 +69,20 @@ export const CodeMirrorEditor = ({
       editor.off("blur", onBlur);
     };
   }, [editor, onFocus, onBlur]);
+
+  React.useEffect(() => {
+    if (!editor) return;
+
+    const subscription = pasteWithoutFormatting.subscribe({
+      next: (text: string) => {
+        const doc = editor.getDoc();
+        var cursor = doc.getCursor();
+        doc.replaceRange(text, cursor);
+      },
+    });
+
+    return () => subscription.unsubscribe();
+  }, [editor]);
 
   React.useLayoutEffect(() => {
     const codeMirror = CodeMirror.fromTextArea(ref.current, {
