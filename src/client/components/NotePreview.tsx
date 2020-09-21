@@ -124,7 +124,7 @@ const Root = styled.div<{ selected: boolean }>`
 
   input[type="checkbox"] {
     margin-left: 0 !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 3px !important;
   }
 `;
 

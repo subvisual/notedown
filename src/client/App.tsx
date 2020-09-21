@@ -51,6 +51,10 @@ const Global = createGlobalStyle`
     line-height: inherit;
   }
 
+  code {
+    font-family: 'RobotoMono';
+  }
+
   * {
     -webkit-font-smoothing: antialiased;
     box-sizing: border-box;

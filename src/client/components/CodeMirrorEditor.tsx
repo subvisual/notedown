@@ -3,9 +3,14 @@ import * as _ from "lodash";
 import styled from "styled-components";
 import * as CodeMirror from "codemirror";
 
-import "codemirror/mode/gfm/gfm";
 import "codemirror/lib/codemirror.css";
 import "codemirror/addon/display/placeholder";
+import "codemirror/addon/display/placeholder";
+import "codemirror/mode/gfm/gfm";
+import "codemirror/mode/javascript/javascript";
+import "codemirror/mode/css/css";
+import "codemirror/mode/ruby/ruby";
+import "codemirror/mode/rust/rust";
 
 import * as Files from "models/files";
 
@@ -67,6 +72,8 @@ export const CodeMirrorEditor = ({
       placeholder,
       lineWrapping: true,
       mode: {
+        fencedCodeBlockHighlighting: false,
+        highlightFormatting: true,
         name: "gfm",
         tokenTypeOverrides: {
           emoji: "emoji",
