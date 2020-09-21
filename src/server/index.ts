@@ -69,6 +69,7 @@ async function createWindow() {
     titleBarStyle: "hiddenInset",
     width: 1500,
     autoHideMenuBar: true,
+    minimizable: true,
     webPreferences: {
       nodeIntegration: true,
     },
