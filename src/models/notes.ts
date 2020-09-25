@@ -46,6 +46,7 @@ export const add = async (
     createdAt: new Date(),
     updatedAt: new Date(),
     deleted: false,
+    archived: false,
   };
 
   return note;
