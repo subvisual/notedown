@@ -124,11 +124,7 @@ export const notesUpdateEpic = (
 ) =>
   action$.pipe(
     ofType(notesUpdate.type),
-    mergeMap(({ payload }) =>
-      of(state$.value.notes.notes.find((note) => note.id === payload.id))
-    ),
-    filter((note) => !!note),
-    tap((note) => Notes.update(state$.value.db.db, note)),
+    tap(({ payload }) => Notes.update(state$.value.db.db, payload)),
     ignoreElements()
   );
 
