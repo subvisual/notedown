@@ -36,10 +36,7 @@ module.exports = [
     target: "electron-main",
     stats: "errors-only",
     node: false,
-    devtool:
-      process.env.NODE_ENV === "production"
-        ? "source-map"
-        : "inline-source-map",
+    devtool: isDev ? "inline-source-map" : "source-map",
     module: {
       rules: [
         {
@@ -82,6 +79,7 @@ module.exports = [
     devServer: {
       contentBase: path.join(__dirname, "build/client"),
       stats: "errors-only",
+      watchContentBase: true,
     },
     module: {
       rules: [

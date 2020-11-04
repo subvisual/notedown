@@ -71,6 +71,7 @@ async function createWindow() {
     autoHideMenuBar: true,
     minimizable: true,
     webPreferences: {
+      enableRemoteModule: true,
       nodeIntegration: true,
     },
   });
