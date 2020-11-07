@@ -14,6 +14,7 @@ import {
   notesDelete,
   notesEditSuccess,
   notesLoadSavedQueriesResult,
+  notesAdd,
 } from "./actions";
 
 export function notesReducer(
@@ -37,9 +38,13 @@ export function notesReducer(
     case notesSearchResult.type:
       return { ...state, searchResult: action.payload };
 
+    case notesAdd.type:
+      return { ...state, edit: { ...action.payload, id: "draft" } };
+
     case notesAddSuccess.type:
       return {
         ...state,
+        edit: null,
         notes: [action.payload, ...state.notes],
         selectedId: action.payload.id,
       };
@@ -86,6 +91,7 @@ export function notesReducer(
       return (
         state || {
           notes: [],
+          edit: null,
           savedSearches: [],
           searchResult: [],
           searchQuery: "",

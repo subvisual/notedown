@@ -17,6 +17,12 @@ export type Note = {
   updatedAt: Date;
 };
 
+export type DraftNote = {
+  id: "draft";
+  content: string;
+  history?: object;
+};
+
 export type SearchResult = {
   id: number;
 };
@@ -24,7 +30,7 @@ export type SearchResult = {
 export interface NotesState {
   savedSearches: string[];
   deleting?: number;
-  edit?: Note;
+  edit?: Note | DraftNote;
   focusId?: number;
   notes: Note[];
   searchQuery: string;

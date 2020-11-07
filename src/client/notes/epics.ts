@@ -1,4 +1,4 @@
-import { interval, of, from, merge } from "rxjs";
+import { interval, of, from } from "rxjs";
 import {
   mergeMap,
   throttle,
@@ -61,7 +61,6 @@ export const notesSaveTmpStateEpic = (
 ) =>
   action$.pipe(
     ofType(notesEditTmp.type),
-    throttle(() => interval(500), { trailing: true }),
     map(({ payload }) => (!!payload ? JSON.stringify(payload) : "")),
     tap((content) => localStorage.setItem("tmpNotesEdit", content)),
     ignoreElements()

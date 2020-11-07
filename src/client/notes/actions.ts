@@ -1,4 +1,4 @@
-import { Note, SearchResult } from "models/types";
+import { DraftNote, Note, SearchResult } from "models/types";
 import createAction from "utils/createAction";
 
 export const notesSelect = createAction("NOTES_SELECT")<number>();
@@ -10,7 +10,7 @@ export const notesRemove = createAction("NOTES_REMOVE")<number>();
 export const notesUpdate = createAction("NOTES_UPDATE")<Note>();
 export const notesEdit = createAction("NOTES_EDIT")<Note | null>();
 export const notesEditSuccess = createAction("NOTES_EDIT_SUCCESS")<Note>();
-export const notesEditTmp = createAction("NOTES_EDIT_TMP")<Note>();
+export const notesEditTmp = createAction("NOTES_EDIT_TMP")<Note | DraftNote>();
 export const notesAdd = createAction("NOTES_ADD")<
   Pick<Note, "content" | "history">
 >();

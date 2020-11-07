@@ -8,7 +8,7 @@ import "codemirror/mode/gfm/gfm";
 import "codemirror/lib/codemirror.css";
 import "codemirror/addon/display/placeholder";
 
-import { notesAdd, notesUpdate, notesEditTmp, notesEdit } from "notes/actions";
+import { notesAdd, notesUpdate, notesEditTmp } from "notes/actions";
 import { getEdit, getWritingFocusMode, getMode } from "selectors";
 import { useEditorPaste } from "utils/useEditorPaste";
 import { useEditorKeydown } from "utils/useEditorKeydown";
@@ -45,25 +45,26 @@ export function Editor() {
       () => {
         const currentContent = editor.getValue();
 
-        if (noteEdit || currentContent)
+        if (noteEdit || currentContent) {
           dispatch(notesEditTmp({ ...noteEdit, content: currentContent }));
-        else dispatch(notesEditTmp(null));
+        } else {
+          dispatch(notesEditTmp(null));
+        }
       },
       500,
-      { maxWait: 2000, trailing: true }
+      { maxWait: 1000, trailing: true, leading: true }
     );
 
     editor.on("change", onChange);
 
     return () => {
       editor.off("change", onChange);
-      dispatch(notesEditTmp(null));
     };
   }, [editor, noteEdit, dispatch]);
 
   const extraKeys = React.useMemo(() => {
     const save = (codeMirror: CodeMirror.Editor) => {
-      if (noteEdit && noteEdit.id) {
+      if (noteEdit && noteEdit.id && noteEdit.id !== "draft") {
         dispatch(
           notesUpdate({
             ...noteEdit,
@@ -81,7 +82,6 @@ export function Editor() {
       }
       setImmediate(() => {
         editor.getInputField().blur();
-        codeMirror.setValue("");
       });
     };
 

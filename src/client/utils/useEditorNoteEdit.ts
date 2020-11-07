@@ -1,20 +1,23 @@
 import * as React from "react";
 
-import { Note } from "../../models/types";
+import { DraftNote, Note } from "models/types";
 
 export const useEditorNoteEdit = (
   editor: CodeMirror.Editor,
-  noteEdit: Note
+  noteEdit: Note | DraftNote
 ) => {
   React.useEffect(() => {
     if (!editor) return;
 
     if (noteEdit && noteEdit.content) {
       editor.setValue(noteEdit.content);
+
       if (noteEdit.history) editor.setHistory(noteEdit.history);
+
       setImmediate(() => {
         editor.execCommand("goDocEnd");
       });
+
       setTimeout(() => {
         editor.refresh();
         editor.execCommand("goDocEnd");
