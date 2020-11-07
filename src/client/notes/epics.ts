@@ -1,4 +1,4 @@
-import { interval, of, from } from "rxjs";
+import { interval, of, from, merge } from "rxjs";
 import {
   mergeMap,
   throttle,
@@ -28,11 +28,15 @@ import {
   notesEdit,
   notesEditTmp,
   notesEditSuccess,
+  notesSaveSearch,
+  notesLoadSavedQueries,
+  notesLoadSavedQueriesResult,
 } from "./actions";
 import * as Notes from "../../models/notes";
 import { RootState, Note } from "../../models/types";
 import { modeSet } from "mode";
 import { getSelected } from "selectors";
+import * as Search from "models/search";
 
 export const notesRestoreTmpStateEpic = (
   action$: ActionsObservable<NotesActionTypes>
@@ -175,6 +179,24 @@ export const notesEditFocusEpic = (
     mergeMap(() => of(modeSet("editor")))
   );
 
+export const notesSaveSearchEpic = (
+  action$: ActionsObservable<ReturnType<typeof notesSaveSearch>>
+) =>
+  action$.pipe(
+    ofType(notesSaveSearch.type),
+    debounceTime(500),
+    map(({ payload }) => Search.save(payload)),
+    mergeMap((queries) => of(notesLoadSavedQueriesResult(queries)))
+  );
+
+export const notesLoadSavedSearchEpic = (
+  action$: ActionsObservable<ReturnType<typeof notesLoadSavedQueries>>
+) =>
+  action$.pipe(
+    ofType(notesLoadSavedQueries.type),
+    mergeMap(() => of(notesLoadSavedQueriesResult(Search.getAll())))
+  );
+
 export const notesEpics = [
   notesLoadEpic,
   notesAddEpic,
@@ -187,4 +209,6 @@ export const notesEpics = [
   notesEditFocusEpic,
   notesRestoreTmpStateEpic,
   notesSaveTmpStateEpic,
+  notesSaveSearchEpic,
+  notesLoadSavedSearchEpic,
 ];

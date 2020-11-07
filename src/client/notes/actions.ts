@@ -18,14 +18,21 @@ export const notesAddSuccess = createAction("NOTES_ADD_SUCCESS")<Note>();
 export const notesLoad = createAction("NOTES_LOAD")();
 export const notesLoadSuccess = createAction("NOTES_LOAD_SUCCESS")<Note[]>();
 export const notesSelectDown = createAction("NOTES_SELECT_DOWN")();
+export const notesLoadSavedQueries = createAction("NOTES_LOAD_SAVED_QUERIES")();
+export const notesLoadSavedQueriesResult = createAction(
+  "NOTES_LOAD_SAVED_QUERIES_RESULT"
+)<string[]>();
+export const notesSaveSearch = createAction("NOTES_SAVE_SEARCH")<string>();
 export const notesSearch = createAction("NOTES_SEARCH")<string>();
 export const notesSearchResult = createAction("NOTES_SEARCH_RESULT")<
   SearchResult[]
 >();
 
 export type NotesActionTypes =
+  | ReturnType<typeof notesLoadSavedQueriesResult>
   | ReturnType<typeof notesSelectDebounced>
   | ReturnType<typeof notesSearchResult>
+  | ReturnType<typeof notesSaveSearch>
   | ReturnType<typeof notesSearch>
   | ReturnType<typeof notesSelect>
   | ReturnType<typeof notesUpdate>

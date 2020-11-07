@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Search } from "./Search";
 import { getSearchQuery } from "../selectors";
-import { notesSearch } from "../notes";
+import { notesSearch, notesSaveSearch } from "../notes";
 import { getWritingFocusMode } from "../selectors";
 
 const Root = styled.div<{ small: boolean }>`
@@ -30,6 +30,7 @@ export function MenuBar() {
       <Search
         value={query}
         onChange={(ev) => dispatch(notesSearch(ev.target.value))}
+        onSave={(value: string) => dispatch(notesSaveSearch(value))}
         placeholder="Search your notes"
       />
     </Root>

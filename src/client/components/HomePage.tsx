@@ -7,7 +7,7 @@ import { NotesList } from "./NotesList";
 import { Editor } from "./Editor";
 import { Help } from "./Help";
 import { MenuBar } from "./MenuBar";
-import { notesLoad } from "../notes";
+import { notesLoad, notesLoadSavedQueries } from "../notes";
 import { modeHandleKey } from "../mode";
 import {
   getSelected,
@@ -15,6 +15,7 @@ import {
   getWritingFocusMode,
   getMode,
 } from "../selectors";
+import { SavedQueryes } from "./SavedQueries";
 
 const Root = styled.div<{ hidePanel: boolean }>`
   display: flex;
@@ -34,6 +35,7 @@ const Root = styled.div<{ hidePanel: boolean }>`
     width: 50%;
     background: ${({ theme, hidePanel }) =>
       hidePanel ? "transparent" : theme.background2};
+    z-index: 4;
 
     @media (max-width: 900px) {
       background: transparent;
@@ -47,6 +49,7 @@ const Left = styled.div<{ hide: boolean }>`
   flex-basis: 700px;
   flex-grow: 0;
   flex-shrink: 1;
+  z-index: 4;
 
   @media (max-width: 900px) {
     position: absolute;
@@ -64,11 +67,28 @@ const Left = styled.div<{ hide: boolean }>`
 `;
 
 const Right = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   flex-basis: 700px;
   flex-grow: 0;
   flex-shrink: 1;
+  z-index: 0;
+  overflow: hidden;
+`;
+
+const RightOverlay = styled.div<{ show: boolean }>`
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 100%;
+  width: 50%;
+  transition: opacity ease-in-out 0.1s;
+  transition-delay: 0.1s;
+  opacity: ${({ show }) => (show ? "1" : "0")};
+  background-color: ${({ theme }) => theme.background2};
+  pointer-events: ${({ show }) => (show ? "initial" : "none")};
+  z-index: 3;
 `;
 
 export function HomePage() {
@@ -81,6 +101,7 @@ export function HomePage() {
 
   useEffect(() => {
     dispatch(notesLoad());
+    dispatch(notesLoadSavedQueries());
   }, []);
 
   useEffect(() => {
@@ -114,6 +135,9 @@ export function HomePage() {
         <Right>
           <Editor />
         </Right>
+        <RightOverlay show={mode == "search"}>
+          <SavedQueryes />
+        </RightOverlay>
       </Root>
     </>
   );

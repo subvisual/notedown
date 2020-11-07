@@ -6,16 +6,12 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { textColorForBackground } from "../utils/color";
 
+import { Title } from "./Title";
 import { getTheme, getBackupFolder, getMode } from "../selectors";
 import { backupFolderSet } from "../settings";
 import { modeClose } from "mode";
 
 const Root = styled.div``;
-
-const Title = styled.div`
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-`;
 
 const Label = styled.div`
   font-weight: bold;

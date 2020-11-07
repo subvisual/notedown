@@ -1,11 +1,10 @@
-import { orderBy, find } from "lodash";
+import { orderBy } from "lodash";
 
 import { Note, NotesState } from "models/types";
 
 import {
   NotesActionTypes,
   notesAddSuccess,
-  notesEdit,
   notesSelectDebounced,
   notesUpdate,
   notesLoadSuccess,
@@ -14,6 +13,7 @@ import {
   notesSearchResult,
   notesDelete,
   notesEditSuccess,
+  notesLoadSavedQueriesResult,
 } from "./actions";
 
 export function notesReducer(
@@ -27,6 +27,9 @@ export function notesReducer(
         return { ...state, deleting: state.selectedId };
       else return { ...state, deleting: null };
     }
+
+    case notesLoadSavedQueriesResult.type:
+      return { ...state, savedSearches: action.payload };
 
     case notesSearch.type:
       return { ...state, searchQuery: action.payload };
@@ -83,6 +86,7 @@ export function notesReducer(
       return (
         state || {
           notes: [],
+          savedSearches: [],
           searchResult: [],
           searchQuery: "",
         }

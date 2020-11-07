@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { textColorForBackground, shadeColor } from "../utils/color";
 import { getMode, getWritingFocusMode } from "../selectors";
-import { modeClose } from "../mode";
+import { modeClose, modeHandleKey } from "../mode";
 
 const Root = styled.div<{ active: boolean }>`
   display: flex;
@@ -76,7 +76,14 @@ const Input = styled.input`
   }
 `;
 
-export const Search = (props: React.InputHTMLAttributes<HTMLInputElement>) => {
+interface Props {
+  onSave: (value: string) => any;
+}
+
+export const Search = ({
+  onSave,
+  ...props
+}: React.InputHTMLAttributes<HTMLInputElement> & Props) => {
   const ref = React.useRef(null);
   const inputRef = React.useRef(null);
   const writingFocusMode = useSelector(getWritingFocusMode);
@@ -91,8 +98,24 @@ export const Search = (props: React.InputHTMLAttributes<HTMLInputElement>) => {
 
     const handler = (ev: KeyboardEvent) => {
       if (focus) ev.stopPropagation();
-      if (focus && ev.key === "Escape") inputRef.current.blur();
-      if (focus && ev.key === "Enter") inputRef.current.blur();
+
+      if (focus && ev.key === "Enter" && (ev.metaKey || ev.ctrlKey)) {
+        onSave(inputRef.current.value);
+        return inputRef.current.blur();
+      }
+
+      if (focus && (ev.key === "Escape" || ev.key === "Enter"))
+        return inputRef.current.blur();
+
+      if (focus && (ev.metaKey || ev.ctrlKey)) {
+        dispatch(
+          modeHandleKey({
+            key: ev.key,
+            ctrlKey: !!ev.ctrlKey,
+            metaKey: !!ev.metaKey,
+          })
+        );
+      }
     };
 
     ref.current.addEventListener("keydown", handler);

@@ -22,6 +22,7 @@ export type SearchResult = {
 };
 
 export interface NotesState {
+  savedSearches: string[];
   deleting?: number;
   edit?: Note;
   focusId?: number;

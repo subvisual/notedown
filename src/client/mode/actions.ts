@@ -1,8 +1,8 @@
 import createAction from "../utils/createAction";
 
-export const modeSet = createAction("MODALS_SET")<string>();
-export const modeClose = createAction("MODALS_CLOSE")();
-export const modeHandleKey = createAction("MODALS_HANDLE_KEY")<{
+export const modeSet = createAction("MODE_SET")<string>();
+export const modeClose = createAction("MODE_CLOSE")();
+export const modeHandleKey = createAction("MODE_HANDLE_KEY")<{
   key: string;
   metaKey: boolean;
   ctrlKey: boolean;

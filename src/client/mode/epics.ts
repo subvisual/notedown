@@ -1,12 +1,12 @@
 import { ofType, ActionsObservable, StateObservable } from "redux-observable";
-import { mergeMap, filter } from "rxjs/operators";
+import { mergeMap, filter, tap, ignoreElements } from "rxjs/operators";
 import { of } from "rxjs";
 
 import { modeHandleKey, modeSet } from "./actions";
 import { RootState, Note } from "models/types";
 import { getSearchResultNotes, getAllNotes, getSelected } from "selectors";
 import { findIndex } from "lodash";
-import { notesSelect, notesEdit, notesDelete } from "notes";
+import { notesSelect, notesEdit, notesDelete, notesSearch } from "notes";
 
 const getSelectedNoteIndex = (notes: Note[], selected: Note) => {
   return selected && findIndex(notes, (note) => note.id === selected.id);
@@ -76,4 +76,22 @@ export const modeNotesKeyEpic = (
     })
   );
 
-export const modeEpics = [modeNotesKeyEpic];
+export const modeSearchKeyEpic = (
+  action$: ActionsObservable<ReturnType<typeof modeHandleKey>>,
+  state$: StateObservable<RootState>
+) =>
+  action$.pipe(
+    filter(() => state$.value.mode.name === "search"),
+    ofType(modeHandleKey.type),
+    mergeMap(({ payload }) => {
+      const nr = parseInt(payload.key, 10);
+
+      if (nr && nr < 10 && nr > 0 && (payload.ctrlKey || payload.metaKey)) {
+        return of(notesSearch(state$.value.notes.savedSearches[nr - 1]));
+      }
+
+      return of();
+    })
+  );
+
+export const modeEpics = [modeNotesKeyEpic, modeSearchKeyEpic];

@@ -51,3 +51,5 @@ export const getDb = (state: RootState) => state.db.db;
 
 export const getBackupFolder = (state: RootState) =>
   state.settings.backupFolder;
+
+export const getSavedQueries = (state: RootState) => state.notes.savedSearches;
