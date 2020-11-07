@@ -11,25 +11,7 @@ var mediaExtensions = function () {
     },
   };
 
-  const youtubeExtension = {
-    type: "lang",
-    regex: /!youtube\[[^\]]*\]\((?<filename>.*?)(?=\"|\))(?<optionalpart>\".*\")?\)/g,
-    replace: (match: string, url: string) => {
-      try {
-        const id = url
-          .split("?")[1]
-          .split("&")
-          .filter((q) => q.startsWith("v"))[0]
-          .split("=")[1];
-
-        return `<div class="youtube"><iframe width="100%" src="https://www.youtube.com/embed/${id}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
-      } catch (e) {
-        return match;
-      }
-    },
-  };
-
-  return [audioExtension, youtubeExtension];
+  return [audioExtension];
 };
 
 const converter = new showdown.Converter({
