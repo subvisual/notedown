@@ -153,6 +153,9 @@ export const Help = () => {
                   <li>
                     <em>t/Cmd+T</em> - Toggle focus mode.
                   </li>
+                  <li>
+                    <em>Cmd+Shift+Enter</em> - Paste without formatting.
+                  </li>
                 </ul>
                 <Title>Search shortcuts</Title>
                 <ul>
