@@ -14,7 +14,6 @@ import {
 import { ofType, ActionsObservable, StateObservable } from "redux-observable";
 
 import {
-  NotesActionTypes,
   notesAdd,
   notesAddSuccess,
   notesLoadSuccess,
@@ -31,7 +30,7 @@ import {
   notesSaveSearch,
   notesLoadSavedQueries,
   notesLoadSavedQueriesResult,
-} from "./actions";
+} from "./reducers";
 import * as Notes from "../../models/notes";
 import { RootState, Note } from "../../models/types";
 import { modeSet } from "mode";
@@ -39,7 +38,7 @@ import { getSelected } from "selectors";
 import * as Search from "models/search";
 
 export const notesRestoreTmpStateEpic = (
-  action$: ActionsObservable<NotesActionTypes>
+  action$: ActionsObservable<ReturnType<typeof notesLoad>>
 ) =>
   action$.pipe(
     ofType(notesLoad.type),
@@ -57,7 +56,7 @@ export const notesRestoreTmpStateEpic = (
   );
 
 export const notesSaveTmpStateEpic = (
-  action$: ActionsObservable<NotesActionTypes>
+  action$: ActionsObservable<ReturnType<typeof notesEditTmp>>
 ) =>
   action$.pipe(
     ofType(notesEditTmp.type),
@@ -67,7 +66,7 @@ export const notesSaveTmpStateEpic = (
   );
 
 export const notesLoadEpic = (
-  action$: ActionsObservable<NotesActionTypes>,
+  action$: ActionsObservable<ReturnType<typeof notesLoad>>,
   state$: StateObservable<RootState>
 ) =>
   action$.pipe(

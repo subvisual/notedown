@@ -1,19 +1,19 @@
+import { createSlice } from "@reduxjs/toolkit";
+
 import { DatabaseState } from "models/types";
 
-import { DatabaseActionTypes, databaseLoad } from "./actions";
+const initialState: DatabaseState = { db: null };
 
-export function databaseReducer(
-  state: DatabaseState,
-  action: DatabaseActionTypes
-): DatabaseState {
-  switch (action.type) {
-    case databaseLoad.type:
+const database = createSlice({
+  name: "database",
+  initialState: initialState,
+  reducers: {
+    databaseLoad: (state, action) => {
       return { ...state, db: action.payload.db };
-    default:
-      return (
-        state || {
-          db: null,
-        }
-      );
-  }
-}
+    },
+  },
+});
+
+export const { databaseLoad } = database.actions;
+
+export const databaseReducer = database.reducer;

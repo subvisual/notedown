@@ -1,64 +1,56 @@
 import { orderBy } from "lodash";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { Note, NotesState } from "models/types";
 
-import {
-  NotesActionTypes,
-  notesAddSuccess,
-  notesSelectDebounced,
-  notesUpdate,
-  notesLoadSuccess,
-  notesRemove,
-  notesSearch,
-  notesSearchResult,
-  notesDelete,
-  notesEditSuccess,
-  notesLoadSavedQueriesResult,
-  notesAdd,
-} from "./actions";
+const initialState: NotesState = {
+  notes: [],
+  edit: null,
+  savedSearches: [],
+  searchResult: [],
+  searchQuery: "",
+};
 
-export function notesReducer(
-  state: NotesState,
-  action: NotesActionTypes
-): NotesState {
-  switch (action.type) {
-    case notesDelete.type: {
+const notes = createSlice({
+  name: "notes",
+  initialState: initialState,
+  reducers: {
+    notesDelete: (state, action) => {
       if (action.payload) return { ...state, deleting: action.payload };
       else if (!state.deleting && !action.payload && state.selectedId)
         return { ...state, deleting: state.selectedId };
       else return { ...state, deleting: null };
-    }
-
-    case notesLoadSavedQueriesResult.type:
+    },
+    notesLoadSavedQueriesResult: (state, action) => {
       return { ...state, savedSearches: action.payload };
-
-    case notesSearch.type:
+    },
+    notesSearch: (state, action) => {
       return { ...state, searchQuery: action.payload };
-
-    case notesSearchResult.type:
+    },
+    notesSearchResult: (state, action) => {
       return { ...state, searchResult: action.payload };
-
-    case notesAdd.type:
+    },
+    notesAdd: (state, action) => {
       return { ...state, edit: { ...action.payload, id: "draft" } };
-
-    case notesAddSuccess.type:
+    },
+    notesAddSuccess: (state, action) => {
       return {
         ...state,
         edit: null,
         notes: [action.payload, ...state.notes],
         selectedId: action.payload.id,
       };
-
-    case notesEditSuccess.type:
+    },
+    notesEditSuccess: (state, action) => {
       return {
         ...state,
         edit: action.payload,
       };
-
-    case notesSelectDebounced.type:
+    },
+    notesSelectDebounced: (state, action) => {
       return { ...state, selectedId: action.payload, focusId: action.payload };
-
-    case notesUpdate.type:
+    },
+    notesUpdate: (state, action) => {
       return {
         ...state,
         edit: null,
@@ -69,8 +61,8 @@ export function notesReducer(
           else return note;
         }),
       };
-
-    case notesLoadSuccess.type: {
+    },
+    notesLoadSuccess: (state, action) => {
       return {
         ...state,
         notes: orderBy(
@@ -79,23 +71,42 @@ export function notesReducer(
           "desc"
         ),
       };
-    }
-
-    case notesRemove.type:
+    },
+    notesRemove: (state, action) => {
       return {
         ...state,
         notes: state.notes.filter((note) => note.id !== action.payload),
       };
+    },
+    notesEdit: (state, _action: PayloadAction<Note | null>) => state,
+    notesEditTmp: (state, _action) => state,
+    notesSelect: (state, _action) => state,
+    notesLoad: (state) => state,
+    notesSelectDown: (state, _action) => state,
+    notesLoadSavedQueries: (state) => state,
+    notesSaveSearch: (state, _action) => state,
+  },
+});
 
-    default:
-      return (
-        state || {
-          notes: [],
-          edit: null,
-          savedSearches: [],
-          searchResult: [],
-          searchQuery: "",
-        }
-      );
-  }
-}
+export const {
+  notesSelect,
+  notesSelectDebounced,
+  notesDelete,
+  notesRemove,
+  notesUpdate,
+  notesEdit,
+  notesEditSuccess,
+  notesEditTmp,
+  notesAdd,
+  notesAddSuccess,
+  notesLoad,
+  notesLoadSuccess,
+  notesSelectDown,
+  notesLoadSavedQueries,
+  notesLoadSavedQueriesResult,
+  notesSaveSearch,
+  notesSearch,
+  notesSearchResult,
+} = notes.actions;
+
+export const notesReducer = notes.reducer;

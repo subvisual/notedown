@@ -1,23 +1,37 @@
-import { SettingsActionTypes, themeColors } from "./";
-import { SettingsState } from "../../models/types";
-import { backupFolderResult } from "./actions";
+import { createSlice } from "@reduxjs/toolkit";
 
-export function settingsReducer(
-  state: SettingsState = {
-    colors: {
-      background1: "#2a2438",
-      background2: "#352f44",
-      accent1: "#411e8f",
-    },
+import { SettingsState } from "../../models/types";
+
+const initialState: SettingsState = {
+  colors: {
+    background1: "#2a2438",
+    background2: "#352f44",
+    accent1: "#411e8f",
   },
-  action: SettingsActionTypes
-): SettingsState {
-  switch (action.type) {
-    case themeColors.type:
+};
+
+const settings = createSlice({
+  name: "settings",
+  initialState: initialState,
+  reducers: {
+    themeColors: (state, action) => {
       return { ...state, colors: action.payload };
-    case backupFolderResult.type:
+    },
+    backupFolderResult: (state, action) => {
       return { ...state, backupFolder: action.payload };
-    default:
-      return state;
-  }
-}
+    },
+    themeLoad: (state) => state,
+    backupFolder: (state) => state,
+    backupFolderSet: (state, _action) => state,
+  },
+});
+
+export const {
+  themeColors,
+  themeLoad,
+  backupFolder,
+  backupFolderResult,
+  backupFolderSet,
+} = settings.actions;
+
+export const settingsReducer = settings.reducer;

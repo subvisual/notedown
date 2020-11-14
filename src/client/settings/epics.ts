@@ -12,19 +12,18 @@ import {
 import { StateObservable } from "redux-observable";
 
 import {
-  SettingsActionTypes,
   themeLoad,
   themeColors,
   backupFolder,
   backupFolderResult,
   backupFolderSet,
-} from "./actions";
+} from "./reducers";
 import * as Theme from "models/theme";
 import * as Backup from "models/backup";
 import { RootState } from "models/types";
 
 export const loadThemeEpic = (
-  action$: ActionsObservable<SettingsActionTypes>,
+  action$: ActionsObservable<ReturnType<typeof themeLoad>>,
   state$: StateObservable<RootState>
 ) =>
   action$.pipe(

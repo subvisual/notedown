@@ -8,7 +8,7 @@ import "codemirror/mode/gfm/gfm";
 import "codemirror/lib/codemirror.css";
 import "codemirror/addon/display/placeholder";
 
-import { notesAdd, notesUpdate, notesEditTmp } from "notes/actions";
+import { notesAdd, notesUpdate, notesEditTmp } from "notes";
 import { getEdit, getWritingFocusMode, getMode } from "selectors";
 import { useEditorPaste } from "utils/useEditorPaste";
 import { useEditorKeydown } from "utils/useEditorKeydown";

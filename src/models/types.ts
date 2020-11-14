@@ -47,16 +47,18 @@ export interface DatabaseState {
   db: Database;
 }
 
+export type ModeStateNames =
+  | "settings"
+  | "tips"
+  | "shortcuts"
+  | "colorPicker"
+  | "notes"
+  | "search"
+  | "editor"
+  | "editorFocus";
+
 export interface ModeState {
-  name:
-    | "settings"
-    | "tips"
-    | "shortcuts"
-    | "colorPicker"
-    | "notes"
-    | "search"
-    | "editor"
-    | "editorFocus";
+  name: ModeStateNames;
 }
 
 export interface RootState {

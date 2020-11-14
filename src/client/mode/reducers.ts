@@ -1,9 +1,15 @@
-import { ModeActionTypes, modeSet, modeClose } from "./actions";
+import { createSlice } from "@reduxjs/toolkit";
+
 import { ModeState } from "models/types";
 
-export function modeReducer(state: ModeState, action: ModeActionTypes) {
-  switch (action.type) {
-    case modeSet.type: {
+const initialState: ModeState = { name: "notes" };
+
+const mode = createSlice({
+  name: "mode",
+  initialState: initialState,
+
+  reducers: {
+    modeSet: (state, action) => {
       if (state.name === "search" && action.payload === "search")
         return { ...state, name: "notes" };
 
@@ -11,11 +17,14 @@ export function modeReducer(state: ModeState, action: ModeActionTypes) {
         return { ...state, name: "editor" };
 
       return { ...state, name: action.payload };
-    }
-
-    case modeClose.type:
+    },
+    modeClose: (state) => {
       return { ...state, name: "notes" };
-    default:
-      return state || { name: "notes" };
-  }
-}
+    },
+    modeHandleKey: (state, _) => state,
+  },
+});
+
+export const { modeSet, modeClose, modeHandleKey } = mode.actions;
+
+export const modeReducer = mode.reducer;

@@ -1,5 +1,6 @@
-import { createStore, combineReducers, compose, applyMiddleware } from "redux";
+import { combineReducers } from "redux";
 import { combineEpics, createEpicMiddleware } from "redux-observable";
+import { configureStore } from "@reduxjs/toolkit";
 
 import { notesReducer } from "../notes/reducers";
 import { settingsReducer } from "../settings/reducers";
@@ -16,20 +17,19 @@ export const rootEpic = combineEpics.apply(this, [
   ...modeEpics,
 ]);
 
-const composeEnhancers =
-  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const epicMiddleware = createEpicMiddleware();
 
-export default function configureStore() {
-  const store = createStore(
-    combineReducers({
+export default function configure() {
+  const store = configureStore({
+    reducer: combineReducers({
       notes: notesReducer,
       settings: settingsReducer,
       mode: modeReducer,
       db: databaseReducer,
     }),
-    composeEnhancers(applyMiddleware(epicMiddleware))
-  );
+    middleware: [epicMiddleware],
+    devTools: true,
+  });
 
   epicMiddleware.run(rootEpic);
 

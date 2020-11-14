@@ -2,7 +2,7 @@ import { ofType, ActionsObservable, StateObservable } from "redux-observable";
 import { mergeMap, filter, tap, ignoreElements } from "rxjs/operators";
 import { of } from "rxjs";
 
-import { modeHandleKey, modeSet } from "./actions";
+import { modeHandleKey, modeSet } from "./reducers";
 import { RootState, Note } from "models/types";
 import { getSearchResultNotes, getAllNotes, getSelected } from "selectors";
 import { findIndex } from "lodash";

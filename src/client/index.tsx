@@ -4,13 +4,13 @@ import { Provider } from "react-redux";
 import { ipcRenderer } from "electron";
 
 import { notesAdd } from "notes";
-import createStore from "./store";
+import configure from "./store";
 import "./fonts.css";
 import "./utils/contextMenu";
 
 import App from "./App";
 
-const store = createStore();
+const store = configure();
 
 ipcRenderer.on("open-url", (_event, data) => {
   const url = new URL(data);
