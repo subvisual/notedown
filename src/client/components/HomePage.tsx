@@ -28,6 +28,7 @@ const Root = styled.div<{ hidePanel: boolean }>`
 
   &::before {
     content: "";
+    pointer-events: none;
     position: absolute;
     top: 0;
     left: 0;

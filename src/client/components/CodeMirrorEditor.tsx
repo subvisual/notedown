@@ -88,6 +88,11 @@ export const CodeMirrorEditor = ({
     const codeMirror = CodeMirror.fromTextArea(ref.current, {
       placeholder,
       lineWrapping: true,
+      lint: false,
+      autocorrect: false,
+      autocapitalize: false,
+      spellcheck: false,
+      gutters: ["cm-custom-gutter-space"],
       mode: {
         fencedCodeBlockHighlighting: false,
         highlightFormatting: true,
@@ -209,7 +214,9 @@ export const CodeMirrorEditor = ({
               line,
               img: img,
               url: url,
-              widget: codeMirror.addLineWidget(line, img),
+              widget: codeMirror.addLineWidget(line, img, {
+                handleMouseEvents: true,
+              }),
             });
           }
         }

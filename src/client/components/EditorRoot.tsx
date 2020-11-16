@@ -8,16 +8,18 @@ import {
 
 export default styled.div<{ center: boolean }>`
   position: relative;
-  background: ${({ theme }) => theme.background1};
-  border-radius: 0.5rem;
   flex: 1;
   overflow: scroll;
-  padding: 1rem 0 0.8rem ${({ center }) => (center ? "0" : "3rem")};
-  cursor: text;
   color: ${({ theme }) => textColorForBackground(theme.background1)};
+  padding: 1rem 0 0.8rem 0;
 
   @media (max-width: 900px) {
-    padding: 1rem 2rem;
+    padding: 1rem 2rem 1rem 0;
+  }
+
+  .cm-custom-gutter-space {
+    width: ${({ center }) => (center ? "0" : "3rem")};
+    background: ${({ theme }) => theme.background1};
   }
 
   img {
