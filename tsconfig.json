@@ -1,18 +1,12 @@
 {
+  "extends": "./tsconfig.build.json",
+
   "compilerOptions": {
-    "jsx": "react",
-    "lib": ["dom", "es2015"],
-    "types": [],
-    "module": "commonjs",
-    "sourceMap": true,
-    "outDir": "build",
-    "baseUrl": ".",
+    "baseUrl": "./packages",
     "paths": {
-      "*": ["node_modules/*", "src/client/*", "src/*"]
-    },
-    "strict": true,
-    "strictNullChecks": false,
-    "noImplicitAny": true
-  },
-  "include": ["src/**/*"]
+      "@notedown/lib": ["lib/src"],
+      "@notedown/app-desktop": ["app-desktop/src"],
+      "@notedown/*": ["*/src"]
+    }
+  }
 }
