@@ -8,7 +8,7 @@ export class Database {
     this.db = db;
   }
 
-  exec = (sql: string) => {
+  exec = (sql: string): Promise<void> => {
     return new Promise((resolve, reject) => {
       let returned = false;
 
@@ -63,7 +63,7 @@ export class Database {
     return this.db.serialize(callback);
   };
 
-  close = () => {
+  close = (): Promise<void> => {
     return new Promise((resolve, reject) => {
       this.db.close((err: Error) => {
         if (err) reject(err);
