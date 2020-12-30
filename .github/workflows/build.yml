@@ -23,7 +23,7 @@ jobs:
           node-version: 10
 
       - name: Build/release Electron app
-        uses: samuelmeuli/action-electron-builder@v1
+        uses: gabrielpoca/action-electron-builder@181b2e24f3809285aff3c5e6147954d826804aee
         env:
           NODE_OPTIONS: --max_old_space_size=8192
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
@@ -33,3 +33,4 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           release: true
+          max_attempts: 3

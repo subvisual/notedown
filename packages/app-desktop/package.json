@@ -1,0 +1,109 @@
+{
+  "name": "@notedown/app-desktop",
+  "version": "1.14.0",
+  "main": "./build/server/index.js",
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:subvisual/notedown.git"
+  },
+  "scripts": {
+    "start": "concurrently --raw  \"yarn webpack-start-client\" \"yarn webpack-start-server\" \"yarn server-start\"",
+    "server-start": "wait-on -d 1500 -i 500 http://localhost:8080 && nodemon --watch ./build/server/ --ext js --exec \"NODE_ENV=development electron build/server/index.js\"",
+    "webpack-start-client": "NODE_ENV=development webpack serve --config-name client",
+    "webpack-start-server": "NODE_ENV=development webpack --watch --config-name server",
+    "build": "NODE_ENV=production webpack",
+    "pack": "yarn build && electron-builder --dir",
+    "dist": "yarn build && electron-builder -ml",
+    "release": "electron-builder"
+  },
+  "build": {
+    "productName": "NoteDown",
+    "appId": "com.gabrielpoca.notedown",
+    "afterSign": "bin/notarize.js",
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "hardenedRuntime": true,
+      "category": "com.gabrielpoca.notedown",
+      "icon": "assets/icons/icon.png"
+    },
+    "linux": {
+      "target": "tar.gz"
+    },
+    "dmg": {
+      "sign": false
+    },
+    "files": [
+      "build/**/*"
+    ],
+    "protocols": {
+      "name": "notedown-protocol",
+      "schemes": [
+        "notedown"
+      ]
+    }
+  },
+  "dependencies": {
+    "sqlite3": "^5.0.0"
+  },
+  "devDependencies": {
+    "@reduxjs/toolkit": "^1.4.0",
+    "@types/codemirror": "^0.0.93",
+    "@types/lodash": "^4.14.150",
+    "@types/lowdb": "^1.0.9",
+    "@types/node": "12",
+    "@types/pdfjs-dist": "^2.1.4",
+    "@types/react": "^16.9.34",
+    "@types/react-color": "^3.0.2",
+    "@types/react-dom": "^16.9.7",
+    "@types/react-modal": "^3.10.5",
+    "@types/react-redux": "^7.1.8",
+    "@types/shortid": "^0.0.29",
+    "@types/showdown": "^1.9.3",
+    "@types/sqlite3": "^3.1.6",
+    "@types/styled-components": "^5.1.0",
+    "axios": "^0.19.2",
+    "codemirror": "^5.53.2",
+    "concurrently": "^5.2.0",
+    "css-loader": "^3.5.3",
+    "date-fns": "^2.13.0",
+    "electron": "10",
+    "electron-builder": "^22.10.4",
+    "electron-is-dev": "^1.2.0",
+    "electron-notarize": "^1.0.0",
+    "error-overlay-webpack-plugin": "^0.4.1",
+    "file-loader": "^6.0.0",
+    "html-webpack-plugin": "^4.3.0",
+    "lowdb": "^1.0.0",
+    "nodemon": "^2.0.3",
+    "pdfjs-dist": "^2.4.456",
+    "raw-loader": "^4.0.1",
+    "react": ">= 16.8.0",
+    "react-color": "^2.18.1",
+    "react-dom": ">= 16.8.0",
+    "react-modal": "^3.11.2",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5",
+    "redux-devtools": "^3.5.0",
+    "redux-observable": "^1.2.0",
+    "reselect": "^4.0.0",
+    "rxjs": "^6.5.5",
+    "shortid": "^2.2.15",
+    "showdown": "^1.9.1",
+    "style-loader": "^1.2.1",
+    "styled-components": "^5.1.0",
+    "terser-webpack-plugin": "^3.0.1",
+    "ts-loader": "^7.0.3",
+    "typescript": "4",
+    "wait-on": "^4.0.2",
+    "webpack": "5",
+    "webpack-cli": "4",
+    "webpack-dev-server": "^3.10.3"
+  }
+}

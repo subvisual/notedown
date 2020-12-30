@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "lib": ["dom", "es2015"],
+    "types": [],
+    "module": "commonjs",
+    "sourceMap": true,
+    "paths": {
+      "*": ["node_modules/*"]
+    },
+    "strict": true,
+    "strictNullChecks": false,
+    "noImplicitAny": true
+  }
+}
